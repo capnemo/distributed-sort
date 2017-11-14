@@ -1,0 +1,3 @@
+scratchLocation /work/scratch
+sortBlockSize 100
+logFileSuffix log.txt

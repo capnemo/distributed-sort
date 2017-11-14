@@ -1,0 +1,20 @@
+a) Const and  append T to types. All over.
+b) Make is not triggered when a header file is changed.
+c) Static thread analyzer.
+d) Destructors everywhere ?? C++ is a pain in the keester!
+f) Remove all literals.
+
+
+a) Worker should log when it start and ends a task.
+b) Remove all initiators. Server side sort logic should be in main.
+c) Client side. Timeout and lastReply. Timeout should be in the config file.
+d) Read task and read reply in protocol.cpp should be redone. Nope!
+e) Dispatch should have its own thread to handle network IO
+f) Move all logs to the logs directory
+h) APIs on either side.
+i) Protocol layer tests! Test if 2 successive tasks or results are properly
+   read! Not necessary. Good to have, though!
+j) Performance issues. On the client side, it may be desirable to signal 
+   the threads to quit when we know the queue is empty. There *maybe*
+   something to be gained by making sure the sizes of files to a merge task
+   are somewhat equal.
