@@ -35,14 +35,20 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+/*
     int servSocket = tcpUtil::getBoundServerSocket(8888);
     if (servSocket == -1) {
         logSink.addEntry("Cannot get server socket");
         std::cout << "Cannot get server socket" << std::endl;
         return -1;
     }
+*/
 
-    dispatch dT(servSocket, &logSink);
+    dispatch dT(8888, &logSink);
+    if (dT.startDispatch() == false) {
+        std::cout << "Cannot start the dispatch thread" << std::endl;
+        return -1;
+    }
 
     uint64_t inputFileSize = inStat.st_size;
     offPairVec fileSegments;
@@ -52,7 +58,6 @@ int main(int argc, char *argv[])
     uint32_t serNo = 0;
     strVec mergeArgs;
     for (auto mem:fileSegments) {
-        dT.manageQs();
         std::string sortOut = outputFile + "." + std::to_string(serNo++);
         if (fileSegments.size() == 1)
             sortOut = outputFile;
@@ -67,7 +72,6 @@ int main(int argc, char *argv[])
     bool sortError = false;
     uint32_t numResults = 0;
     while(mergeArgs.size() > numResults) {
-        dT.manageQs();
         struct result res;
         if (dT.fetchResults(res) == true) {
             numResults++;
@@ -96,8 +100,6 @@ int main(int argc, char *argv[])
     dT.dispatchTask(mergeTask);
     struct result res;
     while (dT.fetchResults(res) == false)
-        dT.manageQs();
-
     if (res.rc != 0) {
         logSink.addEntry("Error during the merge phase");
     } else {

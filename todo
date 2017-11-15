@@ -8,6 +8,7 @@ f) Remove all literals.
 a) Worker should log when it start and ends a task.
 b) Remove all initiators. Server side sort logic should be in main.
 c) Client side. Timeout and lastReply. Timeout should be in the config file.
+   Perhaps the most efficient client should get the next task.
 d) Read task and read reply in protocol.cpp should be redone. Nope!
 e) Dispatch should have its own thread to handle network IO
 f) Move all logs to the logs directory

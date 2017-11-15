@@ -9,17 +9,37 @@
 #include "protocol.h"
 
 
-void dispatch::manageQs()
+bool dispatch::startDispatch()
 {
-    lookForNewClients();
-    handleReads();
-    if (taskQ.size() > 0) 
+    if ((servSock = tcpUtil::getBoundServerSocket(port)) == -1) 
+        return false;
+
+    dispatchThr = new std::thread(&dispatch::manageQs, this);
+    if (dispatchThr == 0)
+        return false;
+
+    return true;
+}
+
+void dispatch::manageQs()
+{ 
+    while (alive == true)  {
+        lookForNewClients();
+        handleReads();
         handleWrites();
+    }
 }
 
 void dispatch::dispatchTask(task& newTask)
-{
+{   
+    std::lock_guard<std::mutex> lck(disMtx);
     taskQ.push(newTask);
+}
+
+void dispatch::addToResults(struct result& rsl)
+{
+    std::lock_guard<std::mutex> lck(disMtx);
+    resultQ.push(rsl);
 }
 
 void dispatch::lookForNewClients() 
@@ -63,7 +83,8 @@ void dispatch::handleReads()
     for (auto mem:rdSet) {
         struct result tR;
         if (protocol::readResult(mem, tR) == true) {
-            resultQ.push(tR);
+            //resultQ.push(tR);
+            addToResults(tR);
             logResult(logPrf + std::to_string(mem), tR);
             clientList.find(mem)->second.active = false;
             clientList.find(mem)->second.lastReply = time(0);
@@ -92,11 +113,12 @@ void dispatch::handleWrites()
     for (uint32_t i = 0; i < currIn; i++) 
         if (wrFd[i].revents & writeMask) 
             cliVec.push_back(clientList.find(wrFd[i].fd)->second);
-    
 
-    std::sort(cliVec.begin(), cliVec.end(), 
-              [](cliState& a, cliState& b){ return a.lastReply < b.lastReply;});
+    if (cliVec.size() != 0)
+        std::sort(cliVec.begin(), cliVec.end(), 
+                  [](cliState& a, cliState& b){ return a.lastReply < b.lastReply;});
 
+    std::lock_guard<std::mutex> lck(disMtx);
     std::string logStr = "Task Dispatch";
     for (auto mem:cliVec) {
         if (taskQ.size() == 0)
@@ -114,6 +136,7 @@ void dispatch::handleWrites()
 
 bool dispatch::fetchResults(result& rc)
 {
+    std::lock_guard<std::mutex> lck(disMtx);
     if (resultQ.size() != 0) {
         rc = resultQ.front();
         resultQ.pop();
@@ -124,6 +147,8 @@ bool dispatch::fetchResults(result& rc)
 
 void dispatch::terminate() 
 {
+    alive = false;
+    dispatchThr->join();
     for (auto mem:clientList) {
         std::string tL = "client " + std::to_string(mem.first) + 
                          " " + "Finished";
