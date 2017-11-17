@@ -1,5 +1,5 @@
 #include <iostream>
-#include "fileSplitter.h"
+#include "filePartition.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     }
 
     std::string inputFile = argv[1];
-    fileSplitter fs(inputFile);
+    filePartition fs(inputFile);
     if (fs.setNumSegments(std::stoi(argv[2])) == false) {
         std::cout << "Error.." << std::endl;
         return -1;

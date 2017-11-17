@@ -30,6 +30,15 @@ void dispatch::manageQs()
     }
 }
 
+void dispatch::dispatchTask(char ty, const strVec& tArgs, 
+                            std::string& taskId)
+{
+    struct task t;
+    getNewTask(ty, tArgs, t);
+    taskId = t.id;
+    dispatchTask(t);
+}
+
 void dispatch::dispatchTask(task& newTask)
 {   
     std::lock_guard<std::mutex> lck(disMtx);
@@ -83,7 +92,6 @@ void dispatch::handleReads()
     for (auto mem:rdSet) {
         struct result tR;
         if (protocol::readResult(mem, tR) == true) {
-            //resultQ.push(tR);
             addToResults(tR);
             logResult(logPrf + std::to_string(mem), tR);
             clientList.find(mem)->second.active = false;
@@ -113,10 +121,22 @@ void dispatch::handleWrites()
     for (uint32_t i = 0; i < currIn; i++) 
         if (wrFd[i].revents & writeMask) 
             cliVec.push_back(clientList.find(wrFd[i].fd)->second);
+    
+    if (cliVec.size() == 0)
+        return;
+
+    auto sF = [] (cliState& a, cliState& b)
+    { 
+        if ((a.lastReply == 0) || (b.lastReply == 0))
+            return a.lastReply < b.lastReply;
+    
+        return ((a.lastReply - a.lastDispatch) < 
+                (b.lastReply - b.lastDispatch));
+    };
 
     if (cliVec.size() != 0)
-        std::sort(cliVec.begin(), cliVec.end(), 
-                  [](cliState& a, cliState& b){ return a.lastReply < b.lastReply;});
+        std::sort(cliVec.begin(), cliVec.end(), sF);
+        //[](cliState& a, cliState& b){ return a.lastReply < b.lastReply;});
 
     std::lock_guard<std::mutex> lck(disMtx);
     std::string logStr = "Task Dispatch";
@@ -127,6 +147,7 @@ void dispatch::handleWrites()
         struct task t = taskQ.front();
         protocol::writeTask(mem.fd, t);
         clientList.find(mem.fd)->second.active = true;
+        clientList.find(mem.fd)->second.lastDispatch = time(0);
         std::string wrLine = " " + std::to_string(mem.fd) + " ";
         logTask(logStr + wrLine, t);
         taskQ.pop();

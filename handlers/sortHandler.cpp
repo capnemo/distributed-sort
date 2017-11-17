@@ -41,11 +41,6 @@ bool sortHandler::handler(const strVec& args)
                               fileOffsets);
 
     uint32_t currentTaskId = 0;
-    #if 0
-    tP = new threadPool(4); //Get num cores for num threads; OR do it in the 
-                            //cstor
-    #endif
-
     threadPool tP; 
     std::string sortBase = scratchDir + sortFileStub; 
     for (auto mem:fileOffsets) {

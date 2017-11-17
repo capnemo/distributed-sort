@@ -8,7 +8,7 @@
 #include "tcpUtil.h"
 #include "serverTypes.h"
 #include "taskInitiator.h"
-#include "fileUtil.h"
+#include "filePartition.h"
 #include "dispatch.h"
 
 
@@ -35,38 +35,32 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-/*
-    int servSocket = tcpUtil::getBoundServerSocket(8888);
-    if (servSocket == -1) {
-        logSink.addEntry("Cannot get server socket");
-        std::cout << "Cannot get server socket" << std::endl;
-        return -1;
-    }
-*/
-
     dispatch dT(8888, &logSink);
     if (dT.startDispatch() == false) {
         std::cout << "Cannot start the dispatch thread" << std::endl;
         return -1;
     }
-
-    uint64_t inputFileSize = inStat.st_size;
-    offPairVec fileSegments;
-    uint64_t fragSize = inputFileSize/numAgents;
-    fileUtil::splitFileBySize(inputFile, 0, inputFileSize, fragSize, 
-                              fileSegments);
+    
     uint32_t serNo = 0;
     strVec mergeArgs;
-    for (auto mem:fileSegments) {
-        std::string sortOut = outputFile + "." + std::to_string(serNo++);
-        if (fileSegments.size() == 1)
+    uint64_t segBegin = 0;
+    uint64_t segEnd;
+    filePartition fs(inputFile);
+    fs.setNumSegments(numAgents);
+    while((segEnd = fs.getNextOffset(segBegin)) != 0) {
+
+        std::string sortOut;
+        if ((fs.lastSegment() == true) && (serNo == 0))  
             sortOut = outputFile;
-        strVec args = {inputFile, std::to_string(mem.first), 
-                       std::to_string(mem.second), sortOut};
+        else
+            sortOut = outputFile + "." + std::to_string(serNo++);
+
         mergeArgs.push_back(sortOut);
-        struct task t;
-        dT.getNewTask('s', args, t);
-        dT.dispatchTask(t);
+        strVec args = {inputFile, std::to_string(segBegin), 
+                       std::to_string(segEnd), sortOut};
+        std::string id;
+        dT.dispatchTask('s', args, id);
+        segBegin = segEnd;
     }
 
     bool sortError = false;
@@ -80,7 +74,7 @@ int main(int argc, char *argv[])
         }
     }
     
-    if (fileSegments.size() == 1) {
+    if (serNo == 0) {
         dT.terminate();
         return 0;
     }
@@ -95,11 +89,12 @@ int main(int argc, char *argv[])
     }
 
     mergeArgs.push_back(outputFile);
-    struct task mergeTask;
-    dT.getNewTask('m', mergeArgs, mergeTask);
-    dT.dispatchTask(mergeTask);
+    std::string mergeId;
+    dT.dispatchTask('m', mergeArgs, mergeId);
+
     struct result res;
-    while (dT.fetchResults(res) == false)
+    while (dT.fetchResults(res) == false);
+
     if (res.rc != 0) {
         logSink.addEntry("Error during the merge phase");
     } else {

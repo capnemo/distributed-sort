@@ -2,6 +2,7 @@ a) Const and  append T to types. All over.
 b) Make is not triggered when a header file is changed.
 c) Static thread analyzer.
 d) Destructors everywhere ?? C++ is a pain in the keester!
+   Have to consider cstors dstors in all classes.
 f) Remove all literals.
 
 
@@ -19,3 +20,8 @@ j) Performance issues. On the client side, it may be desirable to signal
    the threads to quit when we know the queue is empty. There *maybe*
    something to be gained by making sure the sizes of files to a merge task
    are somewhat equal.
+k) Task Dispatch should take the args and id and return the taskId. 
+   GetNewTask should be a private member.
+l) Makefile for the tests
+m) New files have to be opened RW ALL
+n) The file splitter on the agent side should be replaced with filePartition

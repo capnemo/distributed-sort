@@ -18,6 +18,7 @@ class dispatch {
     dispatch(int p, logger* logS):port(p), logSink(logS) {}
     bool startDispatch();
     void dispatchTask(task& newTask);
+    void dispatchTask(char ty, const strVec& tArgs, std::string& taskId);
     bool fetchResults(result& rc);
     void terminate();
     void getNewTask(char tType, const strVec& tArgs, struct task& newTask);
@@ -35,10 +36,11 @@ class dispatch {
     
     private:
     struct cliState {
-        cliState(int s):fd(s),active(false),lastReply(0) {}
+        cliState(int s):fd(s) {}
         int fd;
-        bool active;
-        time_t lastReply;
+        bool active = false;
+        time_t lastDispatch = 0;
+        time_t lastReply = 0;
     };
 
     int port;

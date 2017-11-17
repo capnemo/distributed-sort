@@ -28,7 +28,8 @@ bool multiMergeHandler::handler(const strVec& args)
         return false;
 
     bufferedWriter writer(args[args.size() - 1].c_str(), buffSz);
-    writer.startBuffers();
+    if (writer.startBuffers() == false) 
+        return false;
     
     while (readers.size() > 0) {
 
