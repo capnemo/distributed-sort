@@ -9,7 +9,8 @@ f) Remove all literals.
 a) Worker should log when it start and ends a task.
 b) Remove all initiators. Server side sort logic should be in main.
 c) Client side. Timeout and lastReply. Timeout should be in the config file.
-   Perhaps the most efficient client should get the next task.
+   The most efficient client should get the next task. 
+   Dispatch should be able to detect a client going away. A signal, perhaps.
 d) Read task and read reply in protocol.cpp should be redone. Nope!
 e) Dispatch should have its own thread to handle network IO
 f) Move all logs to the logs directory
@@ -19,9 +20,11 @@ i) Protocol layer tests! Test if 2 successive tasks or results are properly
 j) Performance issues. On the client side, it may be desirable to signal 
    the threads to quit when we know the queue is empty. There *maybe*
    something to be gained by making sure the sizes of files to a merge task
-   are somewhat equal.
+   are somewhat equal. Try out a scheme where *all* files are merged in one go.
+   Also checkout with 8 threads in the pool.
 k) Task Dispatch should take the args and id and return the taskId. 
    GetNewTask should be a private member.
 l) Makefile for the tests
 m) New files have to be opened RW ALL
 n) The file splitter on the agent side should be replaced with filePartition
+o) Protocol versioning.

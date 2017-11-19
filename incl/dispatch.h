@@ -4,6 +4,7 @@
 #include <poll.h>
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 
 #include "localTypes.h"
 #include "serverTypes.h"
@@ -17,22 +18,22 @@ class dispatch {
     public:
     dispatch(int p, logger* logS):port(p), logSink(logS) {}
     bool startDispatch();
-    void dispatchTask(task& newTask);
     void dispatchTask(char ty, const strVec& tArgs, std::string& taskId);
-    bool fetchResults(result& rc);
+    void waitForCompletion(strVec& failedIds);
     void terminate();
-    void getNewTask(char tType, const strVec& tArgs, struct task& newTask);
 
     private:
     void manageQs();
     void lookForNewClients();
     void handleReads();
     void handleWrites();
+    void dispatchTask(task& newTask);
     void logTask(const std::string& prefix, const struct task& tsk);
     void logResult(const std::string& prefix, const struct result& rslt);
     void getTaskId(std::string& id);
     int getOldestClient();
     void addToResults(struct result& rsl);
+    void getNewTask(char tType, const strVec& tArgs, struct task& newTask);
     
     private:
     struct cliState {
@@ -49,13 +50,17 @@ class dispatch {
     const int16_t writeMask = POLLOUT;
     std::map<int, cliState> clientList;
     std::queue<task>  taskQ;
-    std::queue<result>  resultQ;
+    //std::queue<result>  resultQ;
+    std::vector<result> resultList;
     logger* logSink;
     uint32_t taskId = 0;
     bool alive = true;
+    uint32_t tasksDispatched = 0;
+    int32_t outstandingTasks = 0;
 
     std::thread* dispatchThr;
     std::mutex disMtx;
+    std::condition_variable endCond;
 };
 
 #endif /*DISPATCH_H*/

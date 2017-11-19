@@ -37,6 +37,7 @@ void dispatch::dispatchTask(char ty, const strVec& tArgs,
     getNewTask(ty, tArgs, t);
     taskId = t.id;
     dispatchTask(t);
+    tasksDispatched++;
 }
 
 void dispatch::dispatchTask(task& newTask)
@@ -48,7 +49,11 @@ void dispatch::dispatchTask(task& newTask)
 void dispatch::addToResults(struct result& rsl)
 {
     std::lock_guard<std::mutex> lck(disMtx);
-    resultQ.push(rsl);
+    resultList.push_back(rsl);
+    //resultQ.push(rsl);
+    //outstandingTasks = tasksDispatched - resultList.size();
+    if ((tasksDispatched - resultList.size()) == 0)
+        endCond.notify_one();
 }
 
 void dispatch::lookForNewClients() 
@@ -136,7 +141,6 @@ void dispatch::handleWrites()
 
     if (cliVec.size() != 0)
         std::sort(cliVec.begin(), cliVec.end(), sF);
-        //[](cliState& a, cliState& b){ return a.lastReply < b.lastReply;});
 
     std::lock_guard<std::mutex> lck(disMtx);
     std::string logStr = "Task Dispatch";
@@ -155,7 +159,26 @@ void dispatch::handleWrites()
 }
 
 
-bool dispatch::fetchResults(result& rc)
+void dispatch::waitForCompletion(strVec& failedIds)
+{
+    std::unique_lock<std::mutex> lck(disMtx);
+    while(tasksDispatched - resultList.size() != 0) 
+        endCond.wait(lck); //Use a predicate??
+    
+    for (auto mem:resultList)
+        if (mem.rc != 0)
+            failedIds.push_back(mem.id);
+    
+    tasksDispatched = 0;
+    resultList.clear();
+}
+
+#if 0
+bool dispatch::fetchResults(result& rc) //Remove!
+{
+    return false;
+}
+bool dispatch::fetchResults(result& rc) //Remove!
 {
     std::lock_guard<std::mutex> lck(disMtx);
     if (resultQ.size() != 0) {
@@ -165,6 +188,7 @@ bool dispatch::fetchResults(result& rc)
     }
     return false;
 }
+#endif
 
 void dispatch::terminate() 
 {
