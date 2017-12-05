@@ -7,14 +7,80 @@
 #include "threadPool.h"
 #include "config.h"
 #include "mergeSort.h"
-#include "fileUtil.h"
+#include "sortMerge.h"
+#include "filePartition.h"
 #include "sortHandler.h"
 
-static const std::string sortFileStub = "/s.";
-static const std::string mergeFileStub = "/m.";
+static const std::string sortFileStub = "/s";
+static const std::string mergeFileStub = "/m";
 typedef std::pair<std::string, std::string> strPair;
 typedef std::queue<std::string> strQ;
 
+bool sortHandler::handler(const strVec& args) 
+{
+    if (args.size() != 4)
+        return false;
+
+    std::string inputFile = args[0];
+    uint64_t beginRange = std::stoull(args[1]);
+    uint64_t endRange = std::stoull(args[2]);
+    std::string outputFile = args[3];
+    
+    std::string scratchDir;
+    cfg->getValue("scratchLocation", scratchDir);
+    std::string sortBlockSize;
+    cfg->getValue("sortBlockSize", sortBlockSize);
+
+    if ((sortBlockSize == "") || (scratchDir == "")) {
+        logSink->addEntry("Config File Invalid");
+        return false;
+    }
+
+    uint32_t blockSize = std::stoi(sortBlockSize) * 1024 * 1024;
+    filePartition fP(inputFile, scratchDir + sortFileStub);
+    fP.setInterval(blockSize, beginRange, endRange);
+    funcMap fTab = {{'s', mergeSort::sortBlock}};
+    threadPool tP(8, fTab);
+    strVec sliceArgs;
+    std::map<std::string, std::string> mergeTable;
+    while(fP.getNextIter(sliceArgs) == true) {
+        std::string tid;
+        tP.dispatchTask('s', sliceArgs, tid); 
+        mergeTable.insert({tid, sliceArgs[sliceArgs.size() - 1]});
+        sliceArgs.clear();
+    }
+
+    tP.startDispatch();
+    strVec fails;
+    tP.waitForCompletion(fails);
+    tP.terminate();
+    
+    if (fails.size() != 0) 
+        logSink->addEntry(std::to_string(fails.size()) + " Failed sorts");
+    
+    for (auto mem:fails)
+        mergeTable.erase(mem);
+
+    if (mergeTable.size() == 1) {
+        logSink->addEntry("Not enough files to merge");
+        return true;
+    }
+
+    strVec mergeArgs;
+    for (auto mem:mergeTable)
+        mergeArgs.push_back(mem.second);
+    mergeArgs.push_back(outputFile);
+
+    if (multiMerge(mergeArgs) == false)
+        std::cout << "Merge Failed" << std::endl;
+
+    for (uint32_t i = 0; i < mergeArgs.size() -1; i++)
+        unlink(mergeArgs[i].c_str());
+
+    return true;
+}
+
+#if 0
 bool sortHandler::handler(const strVec& args) 
 {
     if (args.size() != 4)
@@ -150,3 +216,4 @@ void sortHandler::printToLog(const std::string prefix, char type,
 
     logSink->addEntry(line);
 }
+#endif

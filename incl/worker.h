@@ -26,7 +26,6 @@ class worker {
     bool finish = false;
     std::thread* exTh;
     std::mutex runMtx;
-    std::mutex resMtx;
     std::condition_variable condVar;
     const uint32_t maxInQ = 1;
 

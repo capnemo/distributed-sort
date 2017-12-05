@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    filePartition fs(inputFile);
-    if (fs.setNumSegments(numAgents) == false) {
+    filePartition fP(inputFile, outputFile);
+    if (fP.setNumIter(numAgents) == false) {
         logSink.addEntry("Cannot open input file");
         return -1;
     }
@@ -41,23 +41,12 @@ int main(int argc, char *argv[])
         return -1;
     }
     
-    uint32_t serNo = 0;
-    uint64_t segBegin = 0;
-    uint64_t segEnd;
     std::map<std::string, std::string> mergeTable;
-    while((segEnd = fs.getNextOffset(segBegin)) != 0) {
-        std::string sortOut;
-        if ((fs.lastSegment() == true) && (serNo == 0))  
-            sortOut = outputFile;
-        else
-            sortOut = outputFile + "." + std::to_string(serNo++);
-
-        strVec args = {inputFile, std::to_string(segBegin), 
-                       std::to_string(segEnd), sortOut};
+    strVec slice;
+    while(fP.getNextIter(slice) != false) {
         std::string id;
-        dT.dispatchTask('s', args, id);
-        mergeTable.insert({id, sortOut});
-        segBegin = segEnd;
+        dT.dispatchTask('s', slice, id);
+        mergeTable.insert({id, slice[slice.size() - 1]});
     }
 
     strVec failedTasks;

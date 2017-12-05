@@ -1,7 +1,7 @@
 CC=clang++ -c -Wall -ggdb -std=c++11 -Wall  -Iincl
 CCLD=clang++ -ggdb -std=c++11 -Wall  -Iincl
 
-AGENT_OBJS := handlers/msgHandler.o handlers/sortHandler.o handlers/multiMergeHandler.o mergeSort/mergeSort.o threadUtil/worker.o threadUtil/threadPool.o io/bufferedReader.o io/bufferedWriter.o common/fileUtil.o common/config.o common/logger.o main.o common/tcpUtil.o common/protocol.o
+AGENT_OBJS := handlers/msgHandler.o handlers/sortHandler.o handlers/multiMergeHandler.o mergeSort/mergeSort.o threadUtil/worker.o threadUtil/threadPool.o io/bufferedReader.o io/bufferedWriter.o common/filePartition.o common/config.o common/logger.o main.o common/tcpUtil.o common/protocol.o mergeSort/multiMerge.o
 
 SERVER_OBJS := common/tcpUtil.o common/protocol.o common/filePartition.o io/dispatch.o common/logger.o lsort.cpp -lpthread
 red_binary=agent_$(shell uname -s)

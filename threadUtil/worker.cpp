@@ -21,9 +21,9 @@ bool worker::ready()
 
 void worker::threadFunc()
 {
-    bool alive = true;
-    while(alive == true) {
-        struct subTask newTask = {0, 0, {}, -1};
+    uint32_t tSz = 0;
+    while((tSz > 0) || (!finish)) {
+        struct subTask newTask = {"", 0, {}, -1};
         std::unique_lock<std::mutex> lck(runMtx);
         if (taskQ.size()  == 0) 
             condVar.wait(lck);
@@ -31,14 +31,13 @@ void worker::threadFunc()
             newTask = taskQ.front();
             taskQ.pop();
         }
+        tSz = taskQ.size();
         lck.unlock();
         if (newTask.func != 0) {
             newTask.result = newTask.func(newTask.args);
-            std::lock_guard<std::mutex> resLck(resMtx);
+            std::lock_guard<std::mutex> resLck(runMtx);
             resultsQ.push(newTask);
         }
-        lck.lock();
-        alive = (taskQ.size() > 0) || (!finish);
     }
 
 }
@@ -59,12 +58,11 @@ void worker::terminate()
 
 bool worker::getResult(struct subTask& res)
 {
-    std::lock_guard<std::mutex> resLck(resMtx);
+    std::lock_guard<std::mutex> resLck(runMtx);
     if (resultsQ.size() != 0) {
         res = resultsQ.front();
         resultsQ.pop();
         return true;
     }
-    
     return false;
 }

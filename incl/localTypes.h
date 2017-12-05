@@ -9,7 +9,7 @@ typedef std::pair<uint64_t, uint64_t> offPair;
 typedef std::vector<offPair> offPairVec;
 
 struct subTask {
-    uint32_t id;
+    std::string id;
     int (*func)(const strVec& args);
     strVec args;
     int result;
