@@ -9,7 +9,9 @@
 #include "serverTypes.h"
 #include "taskInitiator.h"
 #include "filePartition.h"
-#include "dispatch.h"
+#include "nwDispatch.h"
+#include "dispatchIterations.h"
+#include "globalLogger.h"
 
 
 int main(int argc, char *argv[])
@@ -23,24 +25,47 @@ int main(int argc, char *argv[])
     std::string inputFile = argv[1];
     std::string outputFile = argv[2];
     uint32_t numAgents = std::stoi(argv[3]);
-    logger logSink;
-    if (logSink.startLogger("logs/initiator.log") == false) {
-        std::cout << "Cannot start logger" << std::endl;
-        return -1;
-    }
 
+    globalLogger::initLogger("logs/initiator.log");
+    
     filePartition fP(inputFile, outputFile);
     if (fP.setNumIter(numAgents) == false) {
-        logSink.addEntry("Cannot open input file");
+        globalLogger::logEntry("Cannot open Input file");
         return -1;
     }
 
-    dispatch dT(8888, &logSink);
+    nwDispatch dT(8888);
     if (dT.startDispatch() == false) {
         std::cout << "Cannot start the dispatch thread" << std::endl;
         return -1;
     }
     
+    std::cout << "After start dispatch" << std::endl;
+    strVec mergeArgs;
+    dispatchIters(dT, fP, 's', mergeArgs);
+    
+    if (mergeArgs.size() <= 1) {
+        globalLogger::logEntry("Not enough files to merge or too many sort errors");
+        dT.terminate();
+        return true;
+    }
+    
+    mergeArgs.push_back(outputFile);
+    std::string mergeId;
+    dT.dispatchTask('m', mergeArgs, mergeId);
+    strVec failedTasks;
+    dT.waitForCompletion(failedTasks);
+
+    if (failedTasks.size() == 1) {
+        globalLogger::logEntry("Error during the merge phase");
+    } else {
+        for (uint32_t i = 0; i < mergeArgs.size() - 1; i++)
+            unlink(mergeArgs[i].c_str());
+    }
+
+    dT.terminate();
+ 
+#if 0
     std::map<std::string, std::string> mergeTable;
     strVec slice;
     while(fP.getNextIter(slice) != false) {
@@ -82,4 +107,5 @@ int main(int argc, char *argv[])
     }
 
     dT.terminate();
+#endif
 }

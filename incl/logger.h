@@ -15,11 +15,13 @@ class logger {
     public:
     bool startLogger(const std::string& fileName);
     void addEntry(const std::string& line);
-    void closeLogger() {close(logFd);}
+    void closeLogger() {close(logFd); open = false;}
+    bool active() {return open;}
 
     private:
     std::ofstream outStr;
     int logFd;
+    bool open = false;
     std::mutex logMtx;
     std::set<std::string> entries;
 };

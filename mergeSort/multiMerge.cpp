@@ -11,11 +11,11 @@ bool multiMerge(const strVec& args)
     std::vector<bufferedReader*> readers;
     
     if (args.size() < 3) 
-        return 1;
+        return false;
 
     bufferedWriter writer(args[args.size() - 1].c_str(), buffSz);
     if (writer.startBuffers() == false) 
-        return 1;
+        return false;
     
     bool rdFail = false;
     for (int i = 0; i < args.size() - 1; i++) {
@@ -33,7 +33,7 @@ bool multiMerge(const strVec& args)
             mem->cleanup();
             delete mem;
         }
-        return 1;
+        return false;
     }
 
     while (readers.size() > 0) {
@@ -60,7 +60,7 @@ bool multiMerge(const strVec& args)
     
     writer.stopWrites();
     writer.cleanup();
-    return 0;
+    return true;
 }
 
 #if 0

@@ -4,6 +4,7 @@
 #include <thread>
 #include <condition_variable>
 
+#include "dispatch.h"
 #include "worker.h"
 
 #ifndef THREADPOOL_H
@@ -11,14 +12,14 @@
 
 typedef std::map<char, int (*)(const strVec&args)> funcMap;
 
-class threadPool {
+class threadPool:public dispatch {
     public:
     threadPool(funcMap& fT):
     maxThreads(std::thread::hardware_concurrency()/2), functionTable(fT) {}
 
     threadPool(uint32_t mT, funcMap& fT):maxThreads(mT), functionTable(fT) {}
 
-    void startDispatch();
+    bool startDispatch();
     void dispatchTask(char ty, const strVec& tArgs, std::string& taskId);
     void waitForCompletion(strVec& failedIds);
     void terminate();

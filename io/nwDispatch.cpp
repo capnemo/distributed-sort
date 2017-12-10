@@ -1,28 +1,63 @@
+#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include <set>
 
 #include <poll.h>
 
-#include "dispatch.h"
+#include "nwDispatch.h"
 #include "tcpUtil.h"
 #include "protocol.h"
+#include "globalLogger.h"
 
 
-void dispatch::manageQs()
+bool nwDispatch::startDispatch()
 {
-    lookForNewClients();
-    handleReads();
-    if (taskQ.size() > 0) 
-        handleWrites();
+    if ((servSock = tcpUtil::getBoundServerSocket(port)) == -1) 
+        return false;
+
+    dispatchThr = new std::thread(&nwDispatch::manageQs, this);
+    if (dispatchThr == 0)
+        return false;
+
+    return true;
 }
 
-void dispatch::dispatchTask(task& newTask)
+void nwDispatch::manageQs()
+{ 
+    while (alive == true)  {
+        lookForNewClients();
+        handleReads();
+        handleWrites();
+    }
+}
+
+void nwDispatch::dispatchTask(char ty, const strVec& tArgs, 
+                            std::string& taskId)
 {
+    struct task t;
+    getNewTask(ty, tArgs, t);
+    taskId = t.id;
+    dispatchTask(t);
+    tasksDispatched++;
+}
+
+void nwDispatch::dispatchTask(task& newTask)
+{   
+    std::lock_guard<std::mutex> lck(disMtx);
     taskQ.push(newTask);
 }
 
-void dispatch::lookForNewClients() 
+void nwDispatch::addToResults(struct result& rsl)
+{
+    std::lock_guard<std::mutex> lck(disMtx);
+    resultList.push_back(rsl);
+    if ((tasksDispatched - resultList.size()) == 0)
+        endCond.notify_one();
+}
+
+void nwDispatch::lookForNewClients() 
 {
     struct pollfd monFd[1];
     monFd[0].fd = servSock;
@@ -35,11 +70,12 @@ void dispatch::lookForNewClients()
         if ((cliSock = accept(servSock, (struct sockaddr *)&cliAddr,
                                &cliAddrLen)) > 0)  {
             clientList.insert({cliSock,{cliSock}});
+            std::cout << "GOT A NEW CLIENT" << std::endl;
         }
     }
 }
 
-void dispatch::handleReads()
+void nwDispatch::handleReads()
 {
     struct pollfd rdFd[16];
     uint16_t currIn = 0;
@@ -63,17 +99,17 @@ void dispatch::handleReads()
     for (auto mem:rdSet) {
         struct result tR;
         if (protocol::readResult(mem, tR) == true) {
-            resultQ.push(tR);
+            addToResults(tR);
             logResult(logPrf + std::to_string(mem), tR);
             clientList.find(mem)->second.active = false;
             clientList.find(mem)->second.lastReply = time(0);
        } else {
-           logSink->addEntry("Error! on client " + std::to_string(mem));
+           globalLogger::logEntry("Error! on client " + std::to_string(mem));
        }
     }
 }
 
-void dispatch::handleWrites()
+void nwDispatch::handleWrites()
 {
     struct pollfd wrFd[16];
     uint16_t currIn = 0;
@@ -93,10 +129,22 @@ void dispatch::handleWrites()
         if (wrFd[i].revents & writeMask) 
             cliVec.push_back(clientList.find(wrFd[i].fd)->second);
     
+    if (cliVec.size() == 0)
+        return;
 
-    std::sort(cliVec.begin(), cliVec.end(), 
-              [](cliState& a, cliState& b){ return a.lastReply < b.lastReply;});
+    auto sF = [] (cliState& a, cliState& b)
+    { 
+        if ((a.lastReply == 0) || (b.lastReply == 0))
+            return a.lastReply < b.lastReply;
+    
+        return ((a.lastReply - a.lastDispatch) < 
+                (b.lastReply - b.lastDispatch));
+    };
 
+    if (cliVec.size() != 0)
+        std::sort(cliVec.begin(), cliVec.end(), sF);
+
+    std::lock_guard<std::mutex> lck(disMtx);
     std::string logStr = "Task Dispatch";
     for (auto mem:cliVec) {
         if (taskQ.size() == 0)
@@ -105,6 +153,7 @@ void dispatch::handleWrites()
         struct task t = taskQ.front();
         protocol::writeTask(mem.fd, t);
         clientList.find(mem.fd)->second.active = true;
+        clientList.find(mem.fd)->second.lastDispatch = time(0);
         std::string wrLine = " " + std::to_string(mem.fd) + " ";
         logTask(logStr + wrLine, t);
         taskQ.pop();
@@ -112,42 +161,49 @@ void dispatch::handleWrites()
 }
 
 
-bool dispatch::fetchResults(result& rc)
+void nwDispatch::waitForCompletion(strVec& failedIds)
 {
-    if (resultQ.size() != 0) {
-        rc = resultQ.front();
-        resultQ.pop();
-        return true;
-    }
-    return false;
+    std::unique_lock<std::mutex> lck(disMtx);
+    while(tasksDispatched - resultList.size() != 0) 
+        endCond.wait(lck); //Use a predicate??
+    
+    for (auto mem:resultList)
+        if (mem.rc != 0)
+            failedIds.push_back(mem.id);
+    
+    tasksDispatched = 0;
+    resultList.clear();
 }
 
-void dispatch::terminate() 
+void nwDispatch::terminate() 
 {
+    alive = false;
+    dispatchThr->join();
     for (auto mem:clientList) {
         std::string tL = "client " + std::to_string(mem.first) + 
                          " " + "Finished";
-        logSink->addEntry(tL);
+        globalLogger::logEntry(tL);
         protocol::terminateClient(mem.first);
     }
 }
 
-void dispatch::logTask(const std::string& prefix, const struct task& tsk)
+void nwDispatch::logTask(const std::string& prefix, const struct task& tsk)
 {
     std::string line = prefix + " " + tsk.id + " " + tsk.type;
-    logSink->addEntry(line);
-     
+    globalLogger::logEntry(line);
 }
 
-void dispatch::logResult(const std::string& prefix, 
+void nwDispatch::logResult(const std::string& prefix, 
                          const struct result& rslt)
 {
     std::string line = prefix + " " + rslt.id + " RC " 
                        + std::to_string(rslt.rc);
-    logSink->addEntry(line);
+
+    globalLogger::logEntry(line);
 }
 
-void dispatch::getNewTask(char tType, const strVec& tArgs, struct task& newTask)
+void nwDispatch::getNewTask(char tType, const strVec& tArgs, 
+                            struct task& newTask)
 {
     std::string tid;
     getTaskId(tid);
@@ -157,7 +213,7 @@ void dispatch::getNewTask(char tType, const strVec& tArgs, struct task& newTask)
     newTask.args = tArgs;
 }
 
-void dispatch::getTaskId(std::string& id)
+void nwDispatch::getTaskId(std::string& id)
 {
     std::stringstream ss;
     ss << std::setw(4) << std::setfill('0') << taskId;

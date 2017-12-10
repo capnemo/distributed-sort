@@ -1,5 +1,3 @@
-#include "logger.h"
-#include "config.h"
 #include "localTypes.h"
 #include "msgHandler.h"
 
@@ -8,7 +6,7 @@
 
 class multiMergeHandler:public msgHandlerBase {
     public:
-    multiMergeHandler(mrConfig* config, logger* log):msgHandlerBase(config,log) {}
+    multiMergeHandler(){}
     virtual bool handler(const strVec& args);
 
     void printToLog(const std::string line);

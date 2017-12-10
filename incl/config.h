@@ -7,11 +7,12 @@
 class mrConfig {
     
     public:
+    mrConfig(){}
     mrConfig(const std::string& configFile):fileName(configFile) {}
     bool loadTable();
+    bool setConfigFile(const std::string& fileName);
+    void getValue(const std::string key, uint64_t& value) const;
     void getValue(const std::string key, std::string& value) const;
-    static void getLogFileName(const mrConfig& conf, const std::string stub, 
-                               std::string& fileName);
     private:
     typedef std::map<std::string, std::string> table;
     typedef table::const_iterator tableIterator;

@@ -2,13 +2,12 @@
 #include "sortHandler.h"
 #include "multiMergeHandler.h"
 
-msgHandlerBase* msgHandlerBase::getHandler(char handlerId, 
-                                       mrConfig* cfg, logger* logS) {
+msgHandlerBase* msgHandlerBase::getHandler(char handlerId) {
     switch (handlerId) {
         case 's':
-            return new sortHandler(cfg, logS);
+            return new sortHandler();
         case 'm':
-            return new multiMergeHandler(cfg, logS);
+            return new multiMergeHandler();
         default:
             return 0;
     }

@@ -1,7 +1,5 @@
 #include <queue>
 
-#include "logger.h"
-#include "config.h"
 #include "localTypes.h"
 #include "msgHandler.h"
 #include "threadPool.h"
@@ -13,7 +11,7 @@ typedef std::vector<std::pair<std::string, std::string>> strPairVec;
 
 class sortHandler:public msgHandlerBase {
     public:
-    sortHandler(mrConfig* config, logger* log):msgHandlerBase(config,log) {}
+    sortHandler(){}
     virtual bool handler(const strVec& args);
 
     private:

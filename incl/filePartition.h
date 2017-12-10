@@ -2,10 +2,13 @@
 #include <fstream>
 #include <vector>
 #include <string>
+
+#include "iterGen.h"
+
 typedef std::vector<std::string> strVec;
 typedef std::pair<uint64_t, uint64_t> offPair;
 
-class filePartition {
+class filePartition: public iterGen {
     
     public:
     filePartition(const std::string inFile, const std::string outFile): 

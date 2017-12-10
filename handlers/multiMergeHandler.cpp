@@ -4,6 +4,7 @@
 #include "bufferedWriter.h"
 #include "bufferedReader.h"
 #include "multiMergeHandler.h"
+#include "globalLogger.h"
 
 
 bool multiMergeHandler::handler(const strVec& args) 
@@ -24,15 +25,22 @@ bool multiMergeHandler::handler(const strVec& args)
         readers.push_back(bR);
     }
 
-    if (rdFail == true)
+    if (rdFail == true) {
+        // Memory leak! Delete all other readers.
+        globalLogger::logEntry("One of the readers failed to start");
         return false;
+    }
+
 
     bufferedWriter writer(args[args.size() - 1].c_str(), buffSz);
-    if (writer.startBuffers() == false) 
+    if (writer.startBuffers() == false)  {
+        // Memory leak! Delete all readers.
+        globalLogger::logEntry("The writer failed to start");
         return false;
+    }
     
     while (readers.size() > 0) {
-
+    
         const char* currMin = readers[0]->getCurrentLine();
         uint32_t minRdr = 0;
         for (uint32_t i = 0; i < readers.size(); i++) {
@@ -60,7 +68,8 @@ bool multiMergeHandler::handler(const strVec& args)
 
 void multiMergeHandler::printToLog(const std::string line)
 {
-    logSink->addEntry(line);
+    //REMOVE!!
+    //logSink->addEntry(line);
 }
 #if 0
 int main(int argc, char *argv[])

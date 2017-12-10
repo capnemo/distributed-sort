@@ -20,22 +20,25 @@ bool mrConfig::loadTable()
     return true;
 }
 
+bool mrConfig::setConfigFile(const std::string& cfgFile)
+{
+    fileName = cfgFile;
+    return loadTable();
+}
+
+void mrConfig::getValue(const std::string key, uint64_t& value) const
+{
+    value = 0;
+    std::string val;
+    getValue(key, val);
+    if (val != "")
+        value = std::stoull(val);
+}
+
 void mrConfig::getValue(const std::string key, std::string& value) const
 {
     value = "";
-    tableIterator tit = configTable.find(key);
-    if (tit != configTable.end())
-        value = tit->second;
-}
-
-void mrConfig::getLogFileName(const mrConfig& conf, const std::string stub, 
-                    std::string& fileName)
-{
-    std::string logFilePrefixValue;
-    conf.getValue("logFilePrefix", logFilePrefixValue);
-
-    std::string logFileValue;
-    conf.getValue("logFileSuffix", logFileValue);
-
-    fileName = logFilePrefixValue + stub + "-" + logFileValue;
+    tableIterator tIt = configTable.find(key);
+    if (tIt != configTable.end())
+        value = tIt->second;
 }

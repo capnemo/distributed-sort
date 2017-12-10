@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <ctime>
 
 #ifndef LOCALTYPES_H
 #define LOCALTYPES_H
@@ -12,6 +13,8 @@ struct subTask {
     std::string id;
     int (*func)(const strVec& args);
     strVec args;
+    time_t startTime;
+    time_t endTime;
     int result;
 };
 typedef std::vector<struct subTask> taskVec;

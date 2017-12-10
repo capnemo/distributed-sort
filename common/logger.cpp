@@ -16,6 +16,7 @@ bool logger::startLogger(const std::string& fileName)
         return false;
     
     std::cout << "Log file name " << fileName << std::endl;
+    open = true;
     return true;
 }
 

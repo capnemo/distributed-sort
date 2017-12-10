@@ -1,6 +1,7 @@
 #include <iostream>
 #include "threadPool.h"
 #include "mergeSort.h"
+#include "globalLogger.h"
 
 void threadPool::dispatchTask(char ty, const strVec& taskArgs, 
                               std::string& tId)
@@ -36,6 +37,9 @@ void threadPool::queryThreads()
             bool avail = mem->getResult(r);
             if (avail == true) {
                 std::lock_guard<std::mutex> lck(stMtx);
+                uint32_t elapsedTime = r.endTime - r.startTime;
+                std::string times = r.id + " " + std::to_string(elapsedTime);
+                globalLogger::logEntry(times);
                 resQ.push(r);
                 if (resQ.size() == totalIn)
                     endCond.notify_one();
@@ -44,12 +48,14 @@ void threadPool::queryThreads()
     }
 }
 
-void threadPool::startDispatch()
+bool threadPool::startDispatch()
 {
     for (uint32_t i = 0; i < maxThreads; i++)
         threadVec.push_back(new worker());
 
     quThr = new std::thread(&threadPool::queryThreads, this);
+    
+    return true;
 }
 
 void threadPool::waitForCompletion(strVec& failedIds)

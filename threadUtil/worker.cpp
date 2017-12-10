@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdint>
+#include <ctime>
 #include "worker.h"
 
 void worker::addTask(subTask& nextTask)
@@ -34,7 +35,9 @@ void worker::threadFunc()
         tSz = taskQ.size();
         lck.unlock();
         if (newTask.func != 0) {
+            newTask.startTime = time(0);
             newTask.result = newTask.func(newTask.args);
+            newTask.endTime = time(0);
             std::lock_guard<std::mutex> resLck(runMtx);
             resultsQ.push(newTask);
         }
