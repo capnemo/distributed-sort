@@ -25,4 +25,4 @@ class logger {
     std::mutex logMtx;
     std::set<std::string> entries;
 };
-#endif
+#endif /* LOGGER_H */

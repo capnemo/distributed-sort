@@ -6,6 +6,8 @@
 #include <list>
 #include <cstdint>
 
+#ifndef BUFFEREDREADER_H
+#define BUFFEREDREADER_H
 
 class bufferedReader {
     public:
@@ -47,3 +49,5 @@ class bufferedReader {
     std::mutex qMtx;
     std::condition_variable condVar;
 };
+
+#endif /* BUFFEREDREADER_H */

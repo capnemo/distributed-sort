@@ -24,13 +24,6 @@ class threadPool:public dispatch {
     void waitForCompletion(strVec& failedIds);
     void terminate();
 
-    /*
-    void startWorkers();
-    void addToPool(struct subTask& tsk);
-    void getTaskResults(taskVec& res);
-    void stopAllThreads();
-    */
-    
     private:
     void queryThreads();
 
@@ -46,6 +39,5 @@ class threadPool:public dispatch {
     std::thread* quThr = 0;
     std::mutex stMtx;
     std::condition_variable endCond;
-    //std::mutex rMtx;
 };
 #endif  /* THREADPOOL_H */

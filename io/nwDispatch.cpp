@@ -70,7 +70,6 @@ void nwDispatch::lookForNewClients()
         if ((cliSock = accept(servSock, (struct sockaddr *)&cliAddr,
                                &cliAddrLen)) > 0)  {
             clientList.insert({cliSock,{cliSock}});
-            std::cout << "GOT A NEW CLIENT" << std::endl;
         }
     }
 }

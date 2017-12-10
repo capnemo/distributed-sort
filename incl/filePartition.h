@@ -5,6 +5,9 @@
 
 #include "iterGen.h"
 
+#ifndef FILEPARTITION_H
+#define FILEPARTITION_H
+
 typedef std::vector<std::string> strVec;
 typedef std::pair<uint64_t, uint64_t> offPair;
 
@@ -36,3 +39,5 @@ class filePartition: public iterGen {
     uint64_t currentOffset = 0;
     uint64_t fileSize = 0;
 };
+
+#endif /* FILEPARTITION_H */

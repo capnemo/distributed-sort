@@ -7,6 +7,9 @@
 #include <thread>
 #include <condition_variable>
 
+#ifndef BUFFEREDWRITER_H
+#define BUFFEREDWRITER_H
+
 class bufferedWriter {
 
     public:
@@ -40,3 +43,4 @@ class bufferedWriter {
     std::mutex qMtx;
     std::condition_variable condVar;
 };
+#endif /* BUFFEREDWRITER_H */

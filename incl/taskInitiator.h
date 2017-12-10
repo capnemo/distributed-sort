@@ -49,4 +49,5 @@ class sortInitiator:public taskInitiator {
 };
 
 taskInitiator* findInitiator(const std::string& key, strVec& args);
-#endif
+
+#endif /*INITIATOR_H*/
