@@ -37,8 +37,9 @@ void threadPool::queryThreads()
             bool avail = mem->getResult(r);
             if (avail == true) {
                 std::lock_guard<std::mutex> lck(stMtx);
-                uint32_t elapsedTime = r.endTime - r.startTime;
-                std::string times = r.id + " " + std::to_string(elapsedTime);
+                std::string times = r.id + " " + std::to_string(r.startTime) + 
+                                    " " + std::to_string(r.endTime - 
+                                                         r.startTime);
                 globalLogger::logEntry(times);
                 resQ.push(r);
                 if (resQ.size() == totalIn)
