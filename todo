@@ -24,7 +24,11 @@ j) Performance issues. On the client side, it may be desirable to signal
    Also checkout with 8 threads in the pool.
 k) Task Dispatch should take the args and id and return the taskId. 
    GetNewTask should be a private member.
-l) Makefile for the tests
+l) Makefile for the tests and redo the tests.
 m) New files have to be opened RW ALL
 n) The file splitter on the agent side should be replaced with filePartition
 o) Protocol versioning.
+p) If the sortBlockSize is 400m, the time taken goes up by 2-3 times. BS! Ignore
+q) Logs dont work after deploy. Its just a little infelicitous. Done.
+r) Error handling in multiMerge. Done
+s) Remove the hardcoded 8. Calculate the sortBlock size as the total Sort size     divided by the number of cores. 

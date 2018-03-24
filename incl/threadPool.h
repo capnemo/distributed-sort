@@ -15,7 +15,7 @@ typedef std::map<char, int (*)(const strVec&args)> funcMap;
 class threadPool:public dispatch {
     public:
     threadPool(funcMap& fT):
-    maxThreads(std::thread::hardware_concurrency()/2), functionTable(fT) {}
+    maxThreads(std::thread::hardware_concurrency()), functionTable(fT) {}
 
     threadPool(uint32_t mT, funcMap& fT):maxThreads(mT), functionTable(fT) {}
 

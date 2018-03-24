@@ -1,8 +1,39 @@
 #include <cstring>
 #include <cstdio>
 #include <iostream>
+#include "globalLogger.h"
 #include "bufferedReader.h"
 
+void bufferedReader::fillBuffers()
+{
+    while (inFStr) {
+
+        std::unique_lock<std::mutex> qLck(qMtx);
+        if (bufferQ.size() >= bufferSizeLimit) 
+            condVar.wait(qLck);
+        uint32_t bSz = bufferQ.size();
+        qLck.unlock();
+
+        uint32_t size = 0;
+        char *eBuff;
+        if (bSz < bufferSizeLimit)  {
+            eBuff = getReserveBuffer();
+            readFromStream(eBuff, size);
+        } else 
+            continue;
+
+        if (size != 0) {
+            qLck.lock();
+            bufferQ.push({eBuff, size});
+            qLck.unlock();
+            eBuff = 0;
+        } else
+            returnBuffer(eBuff);
+    }
+    ioAvail = false;
+}
+
+#if 0
 void bufferedReader::fillBuffers()
 {
     char* eBuff = 0;
@@ -31,6 +62,8 @@ void bufferedReader::fillBuffers()
     ioAvail = false;
 }
 
+#endif
+
 void bufferedReader::readFromStream(char *buff, uint32_t& len)
 {
     inFStr.read(buff, bufferSize - nominalRecordSize);
@@ -46,8 +79,10 @@ bool bufferedReader::initBuffers()
     inFStr.open(fileName);
     ioAvail = inFStr.is_open();
 
-    if (!ioAvail)
+    if (!ioAvail) {
+        globalLogger::logEntry("Error opening file " + fileName);
         return ioAvail;
+    }
     
     for (uint16_t i = 0; i < reserveSize; i++)  
         reserveList.push_back(new char[bufferSize]);

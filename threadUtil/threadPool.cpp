@@ -81,4 +81,6 @@ void threadPool::terminate()
         mem->terminate();
         delete mem;
     }
+
+    delete quThr;
 }

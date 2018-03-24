@@ -26,7 +26,6 @@ bool multiMergeHandler::handler(const strVec& args)
     }
 
     if (rdFail == true) {
-        // Memory leak! Delete all other readers.
         globalLogger::logEntry("One of the readers failed to start");
         return false;
     }
@@ -34,7 +33,6 @@ bool multiMergeHandler::handler(const strVec& args)
 
     bufferedWriter writer(args[args.size() - 1].c_str(), buffSz);
     if (writer.startBuffers() == false)  {
-        // Memory leak! Delete all readers.
         globalLogger::logEntry("The writer failed to start");
         return false;
     }
@@ -66,12 +64,12 @@ bool multiMergeHandler::handler(const strVec& args)
     return true;
 }
 
+#if 0
 void multiMergeHandler::printToLog(const std::string line)
 {
     //REMOVE!!
     //logSink->addEntry(line);
 }
-#if 0
 int main(int argc, char *argv[])
 {
     if (argc < 4)  {

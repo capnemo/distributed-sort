@@ -1,3 +1,4 @@
+#include <string>
 #include <sstream>
 #include <iomanip>
 #include <iostream>
@@ -12,6 +13,7 @@
 #include "nwDispatch.h"
 #include "dispatchIterations.h"
 #include "globalLogger.h"
+#include "globalConfig.h"
 
 
 int main(int argc, char *argv[])
@@ -26,7 +28,14 @@ int main(int argc, char *argv[])
     std::string outputFile = argv[2];
     uint32_t numAgents = std::stoi(argv[3]);
 
-    globalLogger::initLogger("logs/initiator.log");
+    globalConfig::initConfig("config.txt");
+    std::string logFileName;
+    globalConfig::getLogFileName("initiator", logFileName); 
+    globalLogger::initLogger(logFileName);
+    std::cout << logFileName << std::endl;
+
+    //globalLogger::initLogger("logs/initiator.log");
+
     
     filePartition fP(inputFile, outputFile);
     if (fP.setNumIter(numAgents) == false) {
@@ -55,7 +64,7 @@ int main(int argc, char *argv[])
     strVec failedTasks;
     dT.waitForCompletion(failedTasks);
 
-    if (failedTasks.size() == 1) {
+    if (failedTasks.size() != 0) {
         globalLogger::logEntry("Error during the merge phase");
     } else {
         for (uint32_t i = 0; i < mergeArgs.size() - 1; i++)

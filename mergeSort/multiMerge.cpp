@@ -4,6 +4,7 @@
 #include "bufferedWriter.h"
 #include "bufferedReader.h"
 #include "multiMergeHandler.h"
+#include "globalLogger.h"
 
 bool multiMerge(const strVec& args) 
 {
@@ -14,14 +15,17 @@ bool multiMerge(const strVec& args)
         return false;
 
     bufferedWriter writer(args[args.size() - 1].c_str(), buffSz);
-    if (writer.startBuffers() == false) 
+    if (writer.startBuffers() == false) {
+        writer.stopWrites();
+        writer.cleanup();
         return false;
+    }
     
     bool rdFail = false;
     for (int i = 0; i < args.size() - 1; i++) {
         bufferedReader* bR = new bufferedReader(args[i].c_str(), buffSz);
         if (bR->initBuffers() == false) {
-            std::cout << "FAIL!!" << args[i] << std::endl;
+            globalLogger::logEntry("Reader failed to open " + args[i]);
             rdFail = true;
             break;
         }
@@ -33,6 +37,8 @@ bool multiMerge(const strVec& args)
             mem->cleanup();
             delete mem;
         }
+        writer.stopWrites();
+        writer.cleanup();
         return false;
     }
 

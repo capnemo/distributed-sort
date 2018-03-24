@@ -1,0 +1,3 @@
+
+Build a new test for multiple merge. BufferedReader and bufferedWriter are the
+suspects. Flush in sortBlock??

@@ -1,4 +1,5 @@
 #include "bufferedWriter.h"
+#include "globalLogger.h"
 #include <string.h>
 #include <iostream>
 
@@ -33,8 +34,10 @@ void bufferedWriter::returnBuffer(char *retBuff)
 bool bufferedWriter::startBuffers()
 {
     outFStr.open(fileName);
-    if (outFStr.is_open() == false)
+    if (outFStr.is_open() == false) {
+        globalLogger::logEntry("Error Opening File " + fileName);
         return false;
+    }
 
     for(uint32_t i = 0; i <= reserveSize; i++)   
         reserveList.push_back(new char[bufferSize]);

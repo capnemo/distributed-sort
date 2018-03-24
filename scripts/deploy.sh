@@ -51,8 +51,14 @@ chmod 777 $parentDir/logs
 logPref="logFilePrefix $parentDir/logs/"
 
 copySource "AGENT_OBJS" $parentDir/code
-cp ../incl/serverTypes.h ../incl/localTypes.h $parentDir/code/incl
+for i in serverTypes dispatch localTypes sortMerge
+    do
+        cp ../incl/$i.h $parentDir/code/incl
+    done
+
+#cp ../incl/dispatch.h ../incl/serverTypes.h ../incl/localTypes.h $parentDir/code/incl
 #copySource "COMMON_OBJS" $parentDir/code
+cp ../incl/* $parentDir/code/incl
 
 chmod 777 $parentDir/code/*
 chmod 777 $parentDir/code/*/*
@@ -62,3 +68,4 @@ cp ../lsort $parentDir/run #Change from server to something else.
 cp ../config.txt $parentDir/run
 cp remoteCompile.sh localMake.sh $parentDir/scripts
 cp remoteStart.sh runLocal.sh $parentDir/scripts
+echo $logPref >> $parentDir/run/config.txt

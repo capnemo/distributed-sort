@@ -69,5 +69,6 @@ int main(int argc, char *argv[])
         struct result res = {remTask.id, handRc};
         protocol::writeResult(sock, res);
         globalLogger::logEntry(remTask.id + " " + std::to_string(handRc));
+        delete mH;
     }
 }

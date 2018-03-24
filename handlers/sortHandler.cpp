@@ -31,20 +31,25 @@ bool sortHandler::handler(const strVec& args)
     
     std::string scratchDir;
     globalConfig::getValueByKey("scratchLocation", scratchDir);
-    uint64_t blockSize;
-    globalConfig::getValueByKey("sortBlockSize", blockSize);
+    uint64_t blockSizeLimit;
+    globalConfig::getValueByKey("sortBlockLimit", blockSizeLimit);
 
-    if ((blockSize == 0) || (scratchDir == "")) {
+    if ((blockSizeLimit == 0) || (scratchDir == "")) {
         globalLogger::logEntry("Config File Invalid");
         return false;
     }
-    blockSize *= 1024 * 1024;
+    blockSizeLimit *= 1024 * 1024;
+    uint32_t numCores = std::thread::hardware_concurrency();
+    
+    uint32_t blockSize = std::min(blockSizeLimit, 
+                                 (endRange - beginRange)/numCores);
 
+    globalLogger::logEntry("Sort block size is " + std::to_string(blockSize));
     filePartition fP(inputFile, scratchDir + sortFileStub);
     fP.setInterval(blockSize, beginRange, endRange);
 
     funcMap fTab = {{'s', mergeSort::sortBlock}};
-    threadPool tP(8, fTab);
+    threadPool tP(fTab);
     tP.startDispatch();
 
     strVec mergeArgs;
@@ -55,10 +60,12 @@ bool sortHandler::handler(const strVec& args)
         return false;
     }
     
+    globalLogger::logEntry("Starting merge");
     mergeArgs.push_back(outputFile);
     if (multiMerge(mergeArgs) == false)
         globalLogger::logEntry("Merge Failed");
     
+    globalLogger::logEntry("Merge Complete");
     for (uint32_t i = 0; i < mergeArgs.size() - 1; i++)
         unlink(mergeArgs[i].c_str());
 

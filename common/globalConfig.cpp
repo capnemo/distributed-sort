@@ -24,8 +24,12 @@ void globalConfig::getLogFileName(const std::string stub, std::string& fileName)
     std::string logFilePrefixValue;
     cfg.getValue("logFilePrefix", logFilePrefixValue);
 
+    
+    fileName = logFilePrefixValue + "/" + stub + ".log";
+    /*
     std::string logFileValue;
     cfg.getValue("logFileSuffix", logFileValue);
 
     fileName = logFilePrefixValue + stub + "-" + logFileValue;
+    */
 }
