@@ -1,3 +1,6 @@
+#ifndef TCPUTIL_H
+#define TCPUTIL_H
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -10,9 +13,6 @@
 #include <string>
 #include <cstdlib>
 #include <cstring>
-
-#ifndef TCPUTIL_H
-#define TCPUTIL_H
 
 namespace tcpUtil {
     const uint32_t msgSizeLimit = 256;

@@ -7,12 +7,12 @@ void threadPool::dispatchTask(char ty, const strVec& taskArgs,
                               std::string& tId)
 {
     tId = std::to_string(currentId++);
-    struct subTask st = {tId, 0, taskArgs, 10};
+    struct subTask st = {tId, nullptr, taskArgs, 10};
     st.func = functionTable.find(ty)->second;
 
     std::lock_guard<std::mutex> lck(stMtx);
     totalIn++;
-    if (st.func != 0) {
+    if (st.func != nullptr) {
         sQ.push(st);
     } else {
         st.result = 1;

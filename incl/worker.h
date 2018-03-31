@@ -1,12 +1,12 @@
+#ifndef WORKER_H
+#define WORKER_H
+
 #include <queue>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
 
 #include "localTypes.h"
-
-#ifndef WORKER_H
-#define WORKER_H
 
 class worker {
     public:

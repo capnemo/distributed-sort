@@ -1,3 +1,6 @@
+#ifndef NWDISPATCH_H
+#define NWDISPATCH_H
+
 #include <queue>
 #include <map>
 #include <ctime>
@@ -9,9 +12,6 @@
 #include "dispatch.h"
 #include "localTypes.h"
 #include "serverTypes.h"
-
-#ifndef NWDISPATCH_H
-#define NWDISPATCH_H
 
 class nwDispatch :public dispatch {
     

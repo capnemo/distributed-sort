@@ -9,7 +9,7 @@ msgHandlerBase* msgHandlerBase::getHandler(char handlerId) {
         case 'm':
             return new multiMergeHandler();
         default:
-            return 0;
+            return nullptr;
     }
 }
 

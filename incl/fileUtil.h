@@ -1,11 +1,10 @@
+#ifndef FILEUTIL_H
+#define FILEUTIL_H
 
 #include <fstream>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "localTypes.h"
-
-#ifndef FILEUTIL_H
-#define FILEUTIL_H
 
 namespace fileUtil 
 {

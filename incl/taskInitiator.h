@@ -1,9 +1,9 @@
+#ifndef INITIATOR_H
+#define INITIATOR_H
+
 #include <map>
 #include <queue>
 #include "serverTypes.h"
-
-#ifndef INITIATOR_H
-#define INITIATOR_H
 
 class taskInitiator {
     public:

@@ -2,7 +2,7 @@ a) Const and  append T to types. All over.
 b) Make is not triggered when a header file is changed.
 c) Static thread analyzer.
 d) Destructors everywhere ?? C++ is a pain in the keester!
-   Have to consider cstors dstors in all classes.
+   Have to consider cstors dstors in all classes. Use the default keyword.
 f) Remove all literals.
 
 

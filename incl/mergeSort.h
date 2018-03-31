@@ -1,7 +1,7 @@
-#include "localTypes.h"
-
 #ifndef MERGESORT_H
 #define MERGESORT_H
+
+#include "localTypes.h"
 
 namespace mergeSort {
     int sortBlock(const strVec& args);

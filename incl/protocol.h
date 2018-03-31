@@ -1,9 +1,9 @@
+#ifndef PROTOCOL_H
+#define PROTOCOL_H
+
 #include <string>
 #include "localTypes.h"
 #include "serverTypes.h"
-
-#ifndef PROTOCOL_H
-#define PROTOCOL_H
 namespace protocol {
     void writeResult(int sock, struct result& rst);
     bool readTask(int sock, struct task& tsk);

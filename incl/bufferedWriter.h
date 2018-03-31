@@ -1,3 +1,7 @@
+
+#ifndef BUFFEREDWRITER_H
+#define BUFFEREDWRITER_H
+
 #include <queue>
 #include <list>
 #include <cstdint>
@@ -6,9 +10,6 @@
 #include <fstream>
 #include <thread>
 #include <condition_variable>
-
-#ifndef BUFFEREDWRITER_H
-#define BUFFEREDWRITER_H
 
 class bufferedWriter {
 

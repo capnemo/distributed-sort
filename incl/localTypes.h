@@ -1,10 +1,11 @@
+#ifndef LOCALTYPES_H
+#define LOCALTYPES_H
+
 #include <cstdint>
 #include <vector>
 #include <string>
 #include <ctime>
 
-#ifndef LOCALTYPES_H
-#define LOCALTYPES_H
 typedef std::vector<std::string> strVec;
 typedef std::pair<uint64_t, uint64_t> offPair;
 typedef std::vector<offPair> offPairVec;

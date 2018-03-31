@@ -125,8 +125,9 @@ int mergeBlocks(const strVec& args)
 
 void writeMergeFile(std::ofstream& str, char *rec)
 {
-    strcat(rec, "\n");
+    //strcat(rec, "\n");
     str.write(rec, strlen(rec));
+    str.write("\n", strlen("\n"));
 }
 
 int mergeFiles(const strVec& args)

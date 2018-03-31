@@ -72,5 +72,5 @@ int mergeFiles(const strVec& args)
 
 void printTime()
 {
-    std::cout << time(0) << std::endl;
+    std::cout << time(nullptr) << std::endl;
 }

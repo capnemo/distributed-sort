@@ -1,3 +1,6 @@
+#ifndef DISPATCH_H
+#define DISPATCH_H
+
 #include <queue>
 #include <map>
 #include <ctime>
@@ -8,9 +11,6 @@
 
 #include "localTypes.h"
 #include "serverTypes.h"
-
-#ifndef DISPATCH_H
-#define DISPATCH_H
 
 class dispatch {
     public:

@@ -1,7 +1,7 @@
-#include "localTypes.h"
-
 #ifndef ITERGEN_H
 #define ITERGEN_H
+
+#include "localTypes.h"
 
 class iterGen {
     public:

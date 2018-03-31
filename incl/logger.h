@@ -1,5 +1,7 @@
-#include <fstream>
+#ifndef LOGGER_H
+#define LOGGER_H
 
+#include <fstream>
 #include <sys/time.h>
 #include <sys/file.h>
 #include <unistd.h>
@@ -7,9 +9,6 @@
 
 #include <mutex>
 #include <set>
-
-#ifndef LOGGER_H
-#define LOGGER_H
 
 class logger {
     public:

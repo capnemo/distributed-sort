@@ -47,7 +47,7 @@ bool multiMerge(const strVec& args)
         const char* currMin = readers[0]->getCurrentLine();
         uint32_t minRdr = 0;
         for (uint32_t i = 0; i < readers.size(); i++) {
-            if (readers[i] != 0) {
+            if (readers[i] != nullptr) {
                 if (strcmp(currMin, readers[i]->getCurrentLine()) > 0) {
                     currMin = readers[i]->getCurrentLine();
                     minRdr = i;

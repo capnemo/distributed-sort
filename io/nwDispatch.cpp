@@ -18,7 +18,7 @@ bool nwDispatch::startDispatch()
         return false;
 
     dispatchThr = new std::thread(&nwDispatch::manageQs, this);
-    if (dispatchThr == 0)
+    if (dispatchThr == nullptr)
         return false;
 
     return true;
@@ -101,7 +101,7 @@ void nwDispatch::handleReads()
             addToResults(tR);
             logResult(logPrf + std::to_string(mem), tR);
             clientList.find(mem)->second.active = false;
-            clientList.find(mem)->second.lastReply = time(0);
+            clientList.find(mem)->second.lastReply = time(nullptr);
        } else {
            globalLogger::logEntry("Error! on client " + std::to_string(mem));
        }
@@ -152,7 +152,7 @@ void nwDispatch::handleWrites()
         struct task t = taskQ.front();
         protocol::writeTask(mem.fd, t);
         clientList.find(mem.fd)->second.active = true;
-        clientList.find(mem.fd)->second.lastDispatch = time(0);
+        clientList.find(mem.fd)->second.lastDispatch = time(nullptr);
         std::string wrLine = " " + std::to_string(mem.fd) + " ";
         logTask(logStr + wrLine, t);
         taskQ.pop();
@@ -164,7 +164,7 @@ void nwDispatch::waitForCompletion(strVec& failedIds)
 {
     std::unique_lock<std::mutex> lck(disMtx);
     while(tasksDispatched - resultList.size() != 0) 
-        endCond.wait(lck); //Use a predicate??
+        endCond.wait(lck); 
     
     for (auto mem:resultList)
         if (mem.rc != 0)

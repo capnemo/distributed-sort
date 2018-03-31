@@ -1,7 +1,7 @@
-#include "localTypes.h"
-
 #ifndef SERVERTYPES_H
 #define SERVERTYPES_H
+
+#include "localTypes.h"
 
 struct task {
     char type;

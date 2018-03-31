@@ -1,11 +1,11 @@
+#ifndef SORTHANDLER_H
+#define SORTHANDLER_H
+
 #include <queue>
 
 #include "localTypes.h"
 #include "msgHandler.h"
 #include "threadPool.h"
-
-#ifndef SORTHANDLER_H
-#define SORTHANDLER_H
 
 typedef std::vector<std::pair<std::string, std::string>> strPairVec;
 

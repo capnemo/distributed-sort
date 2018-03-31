@@ -5,7 +5,7 @@
 
 void worker::addTask(subTask& nextTask)
 {
-    if (exTh == 0) 
+    if (exTh == nullptr) 
         exTh = new std::thread(&worker::threadFunc, this);
 
     std::unique_lock<std::mutex> lck(runMtx);
@@ -24,7 +24,7 @@ void worker::threadFunc()
 {
     uint32_t tSz = 0;
     while((tSz > 0) || (!finish)) {
-        struct subTask newTask = {"", 0, {}, -1};
+        struct subTask newTask = {"", nullptr, {}, -1};
         std::unique_lock<std::mutex> lck(runMtx);
         if (taskQ.size()  == 0) 
             condVar.wait(lck);
@@ -34,10 +34,10 @@ void worker::threadFunc()
         }
         tSz = taskQ.size();
         lck.unlock();
-        if (newTask.func != 0) {
-            newTask.startTime = time(0);
+        if (newTask.func != nullptr) {
+            newTask.startTime = time(nullptr);
             newTask.result = newTask.func(newTask.args);
-            newTask.endTime = time(0);
+            newTask.endTime = time(nullptr);
             std::lock_guard<std::mutex> resLck(runMtx);
             resultsQ.push(newTask);
         }
@@ -47,7 +47,7 @@ void worker::threadFunc()
 
 void worker::terminate()
 {
-    if (exTh == 0)
+    if (exTh == nullptr)
         return;
 
     finish = true;

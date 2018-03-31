@@ -10,14 +10,14 @@ void bufferedWriter::writeBuffers()
         if (writeQ.size() == 0) 
             condVar.wait(qLck);
 
-        ptrSizePair qTop(0, 0);
+        ptrSizePair qTop(nullptr, 0);
         if (writeQ.size() != 0) {
             qTop = writeQ.front();
             writeQ.pop();
         }
     
         qLck.unlock();
-        if (qTop.first != 0) {
+        if (qTop.first != nullptr) {
             outFStr.write(qTop.first, qTop.second);
             returnBuffer(qTop.first);
         }
@@ -52,7 +52,7 @@ bool bufferedWriter::startBuffers()
 
 char* bufferedWriter::getNewBuffer() 
 {
-    char *newBuff = 0;
+    char *newBuff = nullptr;
     resMtx.lock();
     if (reserveList.size() != 0) {
         newBuff = reserveList.front();
@@ -60,7 +60,7 @@ char* bufferedWriter::getNewBuffer()
     }
     resMtx.unlock();
 
-    if (newBuff == 0) 
+    if (newBuff == nullptr) 
         newBuff = new char[bufferSize];
 
     return newBuff;
@@ -76,7 +76,7 @@ void bufferedWriter::cycleBuffers(bool newBuff)
     if (newBuff == true)
         currentBuffer = getNewBuffer();
     else
-        currentBuffer = 0;
+        currentBuffer = nullptr;
     currentPos = 0;
 }
 
@@ -114,7 +114,7 @@ void bufferedWriter::cleanup()
 {
     delete writeTh;
 
-    if (currentBuffer != 0)
+    if (currentBuffer != nullptr)
         delete currentBuffer;
 
     while (reserveList.size() != 0) {

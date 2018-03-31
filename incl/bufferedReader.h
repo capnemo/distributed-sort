@@ -1,3 +1,6 @@
+#ifndef BUFFEREDREADER_H
+#define BUFFEREDREADER_H
+
 #include <fstream>
 #include <thread>
 #include <mutex>
@@ -6,18 +9,13 @@
 #include <list>
 #include <cstdint>
 
-#ifndef BUFFEREDREADER_H
-#define BUFFEREDREADER_H
-
 class bufferedReader {
     public:
     bufferedReader(const char *fName, uint32_t buffSz) :fileName(fName),
                                                       bufferSize(buffSz) {}
     bool initBuffers();
     const char * const getLineAndIncr();
-    void getLine(char *lineBuff, uint32_t size);
     const char * const getCurrentLine();
-    //const char * const getNextLine();
     bool isReadComplete();
     void cleanup();
     

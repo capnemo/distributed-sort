@@ -1,3 +1,6 @@
+#ifndef THREADPOOL_H
+#define THREADPOOL_H
+
 #include <queue>
 #include <map>
 #include <mutex>
@@ -6,9 +9,6 @@
 
 #include "dispatch.h"
 #include "worker.h"
-
-#ifndef THREADPOOL_H
-#define THREADPOOL_H
 
 typedef std::map<char, int (*)(const strVec&args)> funcMap;
 

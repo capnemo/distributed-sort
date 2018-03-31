@@ -1,9 +1,8 @@
-#include <string>
-
-#include "config.h"
-
 #ifndef GLOBALCONFIG_H
 #define GLOBALCONFIG_H
+
+#include <string>
+#include "config.h"
 
 namespace globalConfig {
     bool initConfig(std::string fileName);

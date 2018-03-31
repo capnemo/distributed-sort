@@ -23,7 +23,7 @@ bool logger::startLogger(const std::string& fileName)
 void logger::addEntry(const std::string& line) 
 {
     char currTime[128];
-    time_t epochTime = time(0);
+    time_t epochTime = time(nullptr);
     std::string tStr(ctime_r(&epochTime, currTime));
     tStr.erase(tStr.size() - 1);
 

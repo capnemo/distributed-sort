@@ -1,8 +1,8 @@
-#include "localTypes.h"
-#include "msgHandler.h"
-
 #ifndef MULTIMERGEHANDLER_H
 #define MULTIMERGEHANDLER_H
+
+#include "localTypes.h"
+#include "msgHandler.h"
 
 class multiMergeHandler:public msgHandlerBase {
     public:

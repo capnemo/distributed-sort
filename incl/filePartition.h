@@ -1,12 +1,13 @@
+#ifndef FILEPARTITION_H
+#define FILEPARTITION_H
+
+
 #include <cstdint>
 #include <fstream>
 #include <vector>
 #include <string>
 
 #include "iterGen.h"
-
-#ifndef FILEPARTITION_H
-#define FILEPARTITION_H
 
 typedef std::vector<std::string> strVec;
 typedef std::pair<uint64_t, uint64_t> offPair;

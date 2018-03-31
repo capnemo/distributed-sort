@@ -26,7 +26,7 @@ void bufferedReader::fillBuffers()
             qLck.lock();
             bufferQ.push({eBuff, size});
             qLck.unlock();
-            eBuff = 0;
+            eBuff = nullptr;
         } else
             returnBuffer(eBuff);
     }
@@ -113,7 +113,7 @@ void bufferedReader::getBuffer()
     bufferAlive = (bufferQ.size() > 0) ? true:false;
     qLck.unlock();
 
-    if (currentBuffer != 0)
+    if (currentBuffer != nullptr)
         returnBuffer(currentBuffer);
     
     currentBuffer = b.first;
@@ -148,12 +148,6 @@ const char * const bufferedReader::getLineAndIncr()
     return lines[currentLine++];
 }
 
-void bufferedReader::getLine(char *lineBuff, uint32_t size) 
-{
-    checkCurrentLine();
-    strcpy(lineBuff, lines[currentLine++]);
-}
-
 void bufferedReader::returnBuffer(char *buff)
 {
     std::lock_guard<std::mutex> rexLock(resMtx);
@@ -162,7 +156,7 @@ void bufferedReader::returnBuffer(char *buff)
 
 char* bufferedReader::getReserveBuffer()
 {
-    char *rBuff = 0;
+    char *rBuff = nullptr;
     
     resMtx.lock();
     if (reserveList.size() > 0) {
@@ -171,7 +165,7 @@ char* bufferedReader::getReserveBuffer()
     }
     resMtx.unlock();
 
-    if (rBuff == 0) 
+    if (rBuff == nullptr) 
         rBuff = new char[bufferSize];
 
     return rBuff;
@@ -200,7 +194,7 @@ void bufferedReader::cleanup()
     for (auto mem:reserveList) 
         delete [] mem;
 
-    if (currentBuffer != 0)
+    if (currentBuffer != nullptr)
         delete [] currentBuffer;
 
 }
