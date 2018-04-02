@@ -38,13 +38,14 @@ class bufferedReader {
     uint32_t currentLine = 0;
     char* currentBuffer = 0;
     typedef std::pair<char *, uint32_t> ptrSizePair;
+
+    std::mutex qMtx;
     std::queue<ptrSizePair> bufferQ;
+    std::mutex resMtx;
     std::list<char *> reserveList;
     std::vector<char *> lines;
     bool bufferAlive = false;
     std::thread *readTh;
-    std::mutex resMtx;
-    std::mutex qMtx;
     std::condition_variable condVar;
 };
 
