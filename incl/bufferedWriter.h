@@ -21,6 +21,9 @@ class bufferedWriter {
     void addToBuffer(const char *line) { addToBuffer(line, strlen(line));}
     void stopWrites();
     void cleanup();
+    bufferedWriter(const bufferedWriter&) = delete;
+    bufferedWriter& operator = (const bufferedWriter&) = delete;
+    ~bufferedWriter() = default;
 
     private:
     char* getNewBuffer();

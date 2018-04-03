@@ -18,6 +18,9 @@ class bufferedReader {
     const char * const getCurrentLine();
     bool isReadComplete();
     void cleanup();
+    bufferedReader(const bufferedReader&) = delete;
+    bufferedReader& operator = (const bufferedReader&) = delete;
+    ~bufferedReader() = default;
     
     private:
     void fillBuffers();

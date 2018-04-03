@@ -1,3 +1,2 @@
 scratchLocation /work/scratch
 sortBlockLimit 500
-logFilePrefix /work/t2local/logs

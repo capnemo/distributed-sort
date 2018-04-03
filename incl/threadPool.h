@@ -23,6 +23,9 @@ class threadPool:public dispatch {
     void dispatchTask(char ty, const strVec& tArgs, std::string& taskId);
     void waitForCompletion(strVec& failedIds);
     void terminate();
+    threadPool(const threadPool&) = delete;
+    threadPool& operator = (const threadPool&) = delete;
+    ~threadPool() = default;
 
     private:
     void queryThreads();

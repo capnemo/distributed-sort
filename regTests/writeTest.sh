@@ -6,8 +6,8 @@ diff bwdata bwdata.out
 
 if [ $? -ne 0 ]
     then
-    echo "Buffered read test failed."
+    echo "Buffered write test failed."
 else 
-    echo "Buffered read test passed."
+    echo "Buffered write test passed."
     rm bwdata bwdata.out
 fi

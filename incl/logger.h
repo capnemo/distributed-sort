@@ -12,10 +12,15 @@
 
 class logger {
     public:
+    logger() = default;
     bool startLogger(const std::string& fileName);
     void addEntry(const std::string& line);
     void closeLogger() {close(logFd); open = false;}
     bool active() {return open;}
+
+    logger(const logger&) = delete;
+    logger& operator = (const logger&) = delete;
+    ~logger() = default;
 
     private:
     std::ofstream outStr;

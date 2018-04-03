@@ -22,7 +22,10 @@ class filePartition: public iterGen {
     bool setNumIter(int32_t num);
     bool getNextIter(strVec& iterArgs);
     //bool getNextIter(offPair& iter);
-    
+    filePartition(const filePartition&) = delete;
+    filePartition& operator = (const filePartition&) = delete;
+    ~filePartition() = default;
+
     private:
     void openFile();
     void getArgs(uint64_t off1, uint64_t off2, strVec& fullArgs);

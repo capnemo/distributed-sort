@@ -16,6 +16,9 @@ class worker {
     bool getResult(struct subTask& res);
     bool ready(); 
     void terminate();
+    worker(const worker&) = delete;
+    worker& operator = (const worker&) = delete;
+    ~worker() = default;
 
     private:
     void threadFunc();

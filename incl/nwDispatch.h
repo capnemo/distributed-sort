@@ -21,6 +21,9 @@ class nwDispatch :public dispatch {
     void dispatchTask(char ty, const strVec& tArgs, std::string& taskId);
     void waitForCompletion(strVec& failedIds);
     void terminate();
+    nwDispatch(const nwDispatch&) = delete;
+    nwDispatch& operator = (const nwDispatch&) = delete;
+    ~nwDispatch() = default;
 
     private:
     void manageQs();
