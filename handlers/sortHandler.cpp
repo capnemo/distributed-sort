@@ -19,6 +19,19 @@ static const std::string mergeFileStub = "/m";
 typedef std::pair<std::string, std::string> strPair;
 typedef std::queue<std::string> strQ;
 
+/***************************************************************
+FUNCTION: sortHandler::handler
+IN: args Input arguments. 
+arg[0] Input file.
+arg[1] Start range in the input file.
+arg[2] End range in the input file.
+arg[3] ouput file.
+
+Sorts the input range and writes to an output file.
+
+****************************************************************/
+
+
 bool sortHandler::handler(const strVec& args) 
 {
     if (args.size() != 4)

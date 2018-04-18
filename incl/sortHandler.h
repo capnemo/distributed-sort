@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: sortHandler.h
+
+DESCRIPTION:
+    Handler to sort a segment of a large file. 
+
+NOTES:
+    
+***************************************************************************************/
+
+
 #ifndef SORTHANDLER_H
 #define SORTHANDLER_H
 
@@ -13,6 +24,11 @@ class sortHandler:public msgHandlerBase {
     public:
     sortHandler(){}
     virtual bool handler(const strVec& args);
+
+    sortHandler(const sortHandler&) = delete;
+    sortHandler& operator = (const sortHandler&) = delete;
+    virtual ~sortHandler() = default;
+
 
     private:
     void printToLog(const std::string prefix, char type, 

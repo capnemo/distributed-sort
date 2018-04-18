@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: mergeSort.h
+
+DESCRIPTION:
+    Namespace for functions that perform mergeSort on the agent side.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef MERGESORT_H
 #define MERGESORT_H
 

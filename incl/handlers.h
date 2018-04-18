@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: handlers.h
+
+DESCRIPTION:
+    Sort a segment of a file.
+
+NOTES:
+    Depricated.
+***************************************************************************************/
+
+
 
 #ifndef HANDLERS_H 
 #define HANDLERS_H

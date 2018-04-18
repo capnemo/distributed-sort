@@ -1,2 +1,3 @@
 scratchLocation /work/scratch
 sortBlockLimit 500
+logFilePrefix /work/t2Comments/logs

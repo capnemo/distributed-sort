@@ -1,3 +1,15 @@
+/***************************************************************************************
+FILENAME: mergeTest.cpp
+
+DESCRIPTION:
+    Test to merge multiple sorted files into one file. Driver will only check the sizes 
+    of the input and output files.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #include <iostream>
 #include "multiMergeHandler.h"
 

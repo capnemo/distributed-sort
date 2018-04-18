@@ -7,6 +7,16 @@
 
 namespace fileUtil {
 
+/***************************************************************
+FUNCTION: splitFileBySize
+IN: fileName Input file name
+IN: start Start of the file segment to be split
+IN: end End of the file segment to be split
+IN: size Split size.
+IN: segments Number of segments.
+
+****************************************************************/
+
 bool splitFileBySize(const std::string& fileName, uint64_t start, 
                      uint64_t end, uint64_t size, offPairVec& segments)
 {

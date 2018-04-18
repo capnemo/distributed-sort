@@ -1,3 +1,15 @@
+/***************************************************************************************
+FILENAME: threadPool.h
+
+DESCRIPTION:
+    Class to start and supervise to completion threads executing subTasks.
+    Derived from the dispatch class.
+
+NOTES:
+    Cannot be copy constructed and cannot be assigned.
+***************************************************************************************/
+
+
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
 
@@ -23,6 +35,7 @@ class threadPool:public dispatch {
     void dispatchTask(char ty, const strVec& tArgs, std::string& taskId);
     void waitForCompletion(strVec& failedIds);
     void terminate();
+
     threadPool(const threadPool&) = delete;
     threadPool& operator = (const threadPool&) = delete;
     ~threadPool() = default;

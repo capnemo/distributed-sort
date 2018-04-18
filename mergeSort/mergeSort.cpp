@@ -25,6 +25,18 @@ struct charPtrCmp {
 
 void writeMergeFile(std::ofstream& str, char *rec);
 
+
+/***************************************************************
+FUNCTION: sortBlock
+IN: args Argument list.
+args[0] input file.
+args[0] Begin range (offset)
+args[0] end range (offset)
+args[0] output file.
+
+Sorts a contiguous range in a file.
+****************************************************************/
+
 int sortBlock(const strVec& args)
 {
     
@@ -69,6 +81,17 @@ int sortBlock(const strVec& args)
     delete [] buffer;
     return 0;
 }
+
+/***************************************************************
+FUNCTION: mergeBlocks
+IN: args
+args[0] Input file 1
+args[1] Input file 2
+args[2] Merged output file
+
+Merge 2 files using direct I/O
+Returns the status of the operation
+****************************************************************/
 
 int mergeBlocks(const strVec& args)
 {
@@ -123,6 +146,14 @@ int mergeBlocks(const strVec& args)
     return 0;
 }
 
+/***************************************************************
+FUNCTION: writeMergeFile
+IN: str Output file stream
+IN: rec Record to be written.
+
+Write a single record to the ouput stream
+****************************************************************/
+
 void writeMergeFile(std::ofstream& str, char *rec)
 {
     //strcat(rec, "\n");
@@ -130,6 +161,16 @@ void writeMergeFile(std::ofstream& str, char *rec)
     str.write("\n", strlen("\n"));
 }
 
+/***************************************************************
+FUNCTION: mergeFiles
+IN: args
+args[0] Input file 1
+args[1] Input file 2
+args[2] Merged output file
+
+Merge 2 files using buffered I/O
+Returns the status of the operation
+****************************************************************/
 int mergeFiles(const strVec& args)
 {
     const uint32_t writeBufferSize = 10 * 1024 * 1024;

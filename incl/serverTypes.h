@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: serverTypes.h
+
+DESCRIPTION:
+    Datatypes for the initiator side. 
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef SERVERTYPES_H
 #define SERVERTYPES_H
 

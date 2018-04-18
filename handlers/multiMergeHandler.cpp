@@ -7,6 +7,13 @@
 #include "globalLogger.h"
 
 
+/***************************************************************
+FUNCTION: multiMergeHandler::handler
+IN: args Input arguments. args[0..(size - 2)] are input files. 
+         args[size -1] is the output file.
+
+Merges multiple files to a single file.
+****************************************************************/
 bool multiMergeHandler::handler(const strVec& args) 
 {
     uint32_t buffSz = 10 * 1024 * 1024;

@@ -1,3 +1,19 @@
+/****************************************************************************************
+FILENAME: bufferedReader.h
+
+DESCRIPTION: 
+    Class to read a large file with delimited records. 
+    Records are to be consumed one at a time.
+    Data is read from the input file one block at a time in an independent thread
+    The number of buffers will not exceed bufferSizeLimit at any time.
+    Buffers are recycled.
+
+NOTES:
+    Class is not copy constructible or assignable. It is also not be inherited.
+
+****************************************************************************************/
+
+
 #ifndef BUFFEREDREADER_H
 #define BUFFEREDREADER_H
 
@@ -18,6 +34,7 @@ class bufferedReader {
     const char * const getCurrentLine();
     bool isReadComplete();
     void cleanup();
+
     bufferedReader(const bufferedReader&) = delete;
     bufferedReader& operator = (const bufferedReader&) = delete;
     ~bufferedReader() = default;

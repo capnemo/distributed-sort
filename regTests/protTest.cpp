@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: protTest.cpp
+
+DESCRIPTION:
+    Test of the protocol layer. No network code involved.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #include <iostream>
 #include "protocol.h"
 

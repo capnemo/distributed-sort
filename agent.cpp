@@ -8,6 +8,11 @@
 #include "tcpUtil.h"
 #include "globalLogger.h"
 
+/********************************************************************
+File: agent.cpp
+
+Entry point for the agent code. For long sort.
+********************************************************************/
 //Port in the config file. 
 //config file on the command line ??
 void encodeRC(std::string& tId, bool result, std::string& reply);

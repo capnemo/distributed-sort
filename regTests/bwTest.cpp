@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: bwTest.cpp
+
+DESCRIPTION: 
+    Sanity test for bufferedWriter. Driver will compare input and output files.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #include <iostream>
 #include "bufferedWriter.h"
 int main(int argc, char *argv[])

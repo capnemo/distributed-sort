@@ -1,3 +1,17 @@
+/***************************************************************************************
+FILENAME: config.h
+
+DESCRIPTION:
+
+Class to read the config file. The config file is a text file containing key value pairs.
+An object of this is meant to be used through globalConfig set of functions.
+
+NOTES:
+
+Not copy constructible or assignable. Not to be instantiated directly.
+***************************************************************************************/
+
+
 #ifndef MRCONFIG_H
 #define MRCONFIG_H
 

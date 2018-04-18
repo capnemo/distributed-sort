@@ -1,3 +1,19 @@
+/***************************************************************************************
+FILENAME: logger.h
+
+DESCRIPTION:
+    Class for logging. Works on the agent and the initiator side.
+    The actual write to the log file is protected by a mutex because there are multiple 
+    threads that use a single instance of this class.
+    Works on both the agent and initiator sides for different log files. 
+
+
+NOTES:
+    Cannot be copy constructed and cannot be assigned.
+
+***************************************************************************************/
+
+
 #ifndef LOGGER_H
 #define LOGGER_H
 

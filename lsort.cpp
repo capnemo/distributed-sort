@@ -1,6 +1,11 @@
-#include <string>
-#include <sstream>
-#include <iomanip>
+
+/************************************************************************
+FILE: lsort.cpp
+
+Description:
+Entry point for the initiator side for long sort. Starts and completes network dispatch.
+************************************************************************/
+
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -29,14 +34,12 @@ int main(int argc, char *argv[])
     uint32_t numAgents = std::stoi(argv[3]);
 
     globalConfig::initConfig("config.txt");
+
     std::string logFileName;
     globalConfig::getLogFileName("initiator", logFileName); 
     globalLogger::initLogger(logFileName);
     std::cout << logFileName << std::endl;
 
-    //globalLogger::initLogger("logs/initiator.log");
-
-    
     filePartition fP(inputFile, outputFile);
     if (fP.setNumIter(numAgents) == false) {
         globalLogger::logEntry("Cannot open Input file");

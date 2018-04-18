@@ -1,3 +1,15 @@
+/***************************************************************************************
+FILENAME: protocol.h
+
+DESCRIPTION:
+    Namespace for functions that implement a request response protocol for initiator agent
+    communications. 
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
@@ -12,8 +24,8 @@ namespace protocol {
     void terminateClient(int sock);
     void splitString(const std::string& inStr, strVec& fragments);
     void encodeTask(const task& tsk, std::string& pStr);
-    void decodeTask(const std::string& pStr, task& tsk);
-    void decodeResult(const std::string& rStr, struct result& res);
+    bool decodeTask(const std::string& pStr, task& tsk);
+    bool decodeResult(const std::string& rStr, struct result& res);
     void encodeResult(const struct result& res, std::string& rStr);
     void getTerminateMsg(std::string& msg);
     bool endOfConnection(const std::string& msg);

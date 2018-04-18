@@ -6,6 +6,15 @@
 #include "multiMergeHandler.h"
 #include "globalLogger.h"
 
+/***************************************************************
+FUNCTION: multiMerge(
+IN: args
+args[0..(size - 2)] input files.
+args[size - 1] merged output file.
+
+Merges multiple files using buffered I/O
+****************************************************************/
+
 bool multiMerge(const strVec& args) 
 {
     uint32_t buffSz = 10 * 1024 * 1024;

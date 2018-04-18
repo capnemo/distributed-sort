@@ -1,13 +1,17 @@
+/***************************************************************************************
+FILENAME: dispatch.h
+
+DESCRIPTION:
+    Abstract class for nwDispatch and threadPool. 
+    Sets the interface for "fan out" from one task to a number of subtasks. 
+NOTES:
+    Abstract class.
+
+***************************************************************************************/
+
+
 #ifndef DISPATCH_H
 #define DISPATCH_H
-
-#include <queue>
-#include <map>
-#include <ctime>
-#include <poll.h>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
 
 #include "localTypes.h"
 #include "serverTypes.h"

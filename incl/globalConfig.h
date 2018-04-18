@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: globalConfig.h
+
+DESCRIPTION:
+    Set of helper functions to use mrConfig.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef GLOBALCONFIG_H
 #define GLOBALCONFIG_H
 

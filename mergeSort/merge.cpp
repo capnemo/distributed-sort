@@ -27,6 +27,17 @@ int main(int argc, char *argv[])
     return 0;
 }
 */
+
+/***************************************************************
+FUNCTION: mergeFiles
+IN: args Input arguments.
+args[0] input file 1
+args[1] input file 2
+args[2] merged output file 
+
+Merge 2 files to 1 file. Prototype code. Not used.
+****************************************************************/
+
 int mergeFiles(const strVec& args)
 {
     

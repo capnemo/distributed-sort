@@ -1,3 +1,15 @@
+/***************************************************************************************
+FILENAME: threadTest.cpp
+
+DESCRIPTION:
+    Test of threadPool and worker classes. Code will run a number of worker threads to generate
+    random numbers and check the output for corectness.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>

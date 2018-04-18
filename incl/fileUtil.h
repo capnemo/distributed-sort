@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: fileUtil.h
+
+DESCRIPTION:
+    Function to split a file by size of each segment. 
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef FILEUTIL_H
 #define FILEUTIL_H
 

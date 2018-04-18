@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: iterGen.h
+
+DESCRIPTION:
+    Abstract class to divide a workload into smaller units.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef ITERGEN_H
 #define ITERGEN_H
 

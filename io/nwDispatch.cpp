@@ -11,6 +11,12 @@
 #include "protocol.h"
 #include "globalLogger.h"
 
+/***************************************************************
+FUNCTION: nwDispatch::startDispatch()
+
+Start the server socket and the dispatch thread.
+****************************************************************/
+
 
 bool nwDispatch::startDispatch()
 {
@@ -24,6 +30,13 @@ bool nwDispatch::startDispatch()
     return true;
 }
 
+
+/***************************************************************
+FUNCTION: nwDispatch::manageQs()a
+
+Manage socket events.
+****************************************************************/
+
 void nwDispatch::manageQs()
 { 
     while (alive == true)  {
@@ -32,6 +45,17 @@ void nwDispatch::manageQs()
         handleWrites();
     }
 }
+
+
+/***************************************************************
+FUNCTION: nwDispatch::dispatchTask
+IN: ty Task type.
+IN: tArgs Task arguments.
+OUT: taskId Task id.
+
+Dispatch task.
+
+****************************************************************/
 
 void nwDispatch::dispatchTask(char ty, const strVec& tArgs, 
                             std::string& taskId)
@@ -43,12 +67,24 @@ void nwDispatch::dispatchTask(char ty, const strVec& tArgs,
     tasksDispatched++;
 }
 
+/***************************************************************
+FUNCTION: nwDispatch::dispatchTask
+newTask dispatchable task
+
+Enqueue a task
+****************************************************************/
 void nwDispatch::dispatchTask(task& newTask)
 {   
     std::lock_guard<std::mutex> lck(disMtx);
     taskQ.push(newTask);
 }
 
+/***************************************************************
+FUNCTION: nwDispatch::addToResults
+IN: rsl Task result
+
+Append to the results list
+****************************************************************/
 void nwDispatch::addToResults(struct result& rsl)
 {
     std::lock_guard<std::mutex> lck(disMtx);
@@ -57,6 +93,11 @@ void nwDispatch::addToResults(struct result& rsl)
         endCond.notify_one();
 }
 
+/***************************************************************
+FUNCTION: nwDispatch::lookForNewClients() 
+
+Service new clients.
+****************************************************************/
 void nwDispatch::lookForNewClients() 
 {
     struct pollfd monFd[1];
@@ -74,6 +115,11 @@ void nwDispatch::lookForNewClients()
     }
 }
 
+/***************************************************************
+FUNCTION: nwDispatch::handleReads()
+
+Handle reads on all sockets.
+****************************************************************/
 void nwDispatch::handleReads()
 {
     struct pollfd rdFd[16];
@@ -107,6 +153,12 @@ void nwDispatch::handleReads()
        }
     }
 }
+
+/***************************************************************
+FUNCTION: nwDispatch::handleWrites() 
+
+Handle writes on all sockets.
+****************************************************************/
 
 void nwDispatch::handleWrites()
 {
@@ -159,7 +211,12 @@ void nwDispatch::handleWrites()
     }
 }
 
+/***************************************************************
+FUNCTION: nwDispatch::waitForCompletion
+OUT: failedIds list of failed task ids.
 
+Block until all the tasks are complete.
+****************************************************************/
 void nwDispatch::waitForCompletion(strVec& failedIds)
 {
     std::unique_lock<std::mutex> lck(disMtx);
@@ -174,6 +231,13 @@ void nwDispatch::waitForCompletion(strVec& failedIds)
     resultList.clear();
 }
 
+
+/***************************************************************
+FUNCTION: nwDispatch::terminate() 
+
+Terminate all clients and close the dispatch thread.
+****************************************************************/
+
 void nwDispatch::terminate() 
 {
     alive = false;
@@ -186,11 +250,27 @@ void nwDispatch::terminate()
     }
 }
 
+/***************************************************************
+FUNCTION: nwDispatch::logTask
+IN: prefix log prefix.
+IN: task& tsk Task to be logged.
+
+Log a task
+****************************************************************/
 void nwDispatch::logTask(const std::string& prefix, const struct task& tsk)
 {
     std::string line = prefix + " " + tsk.id + " " + tsk.type;
     globalLogger::logEntry(line);
 }
+
+
+/***************************************************************
+FUNCTION: nwDispatch::logResult
+IN: prefix log prefix
+IN: rslt result
+
+Log a task result.
+****************************************************************/
 
 void nwDispatch::logResult(const std::string& prefix, 
                          const struct result& rslt)
@@ -201,6 +281,14 @@ void nwDispatch::logResult(const std::string& prefix,
     globalLogger::logEntry(line);
 }
 
+/***************************************************************
+FUNCTION: nwDispatch::getNewTask
+IN: tType task type
+IN: tArgs task args
+IN: newTask new task
+
+Construct a new task.
+****************************************************************/
 void nwDispatch::getNewTask(char tType, const strVec& tArgs, 
                             struct task& newTask)
 {
@@ -212,6 +300,13 @@ void nwDispatch::getNewTask(char tType, const strVec& tArgs,
     newTask.args = tArgs;
 }
 
+/***************************************************************
+FUNCTION: nwDispatch::getTaskId
+OUT: id  task id.
+
+Construct a new task id.
+
+****************************************************************/
 void nwDispatch::getTaskId(std::string& id)
 {
     std::stringstream ss;

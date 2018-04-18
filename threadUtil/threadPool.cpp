@@ -3,6 +3,15 @@
 #include "mergeSort.h"
 #include "globalLogger.h"
 
+/***************************************************************
+FUNCTION: threadPool::dispatchTask
+IN: ty Task function type.
+IN: taskArgs Task arguments.
+OUT: tId Task Id.
+
+Dispatch the task to a thread in the pool.
+****************************************************************/
+
 void threadPool::dispatchTask(char ty, const strVec& taskArgs, 
                               std::string& tId)
 {
@@ -20,6 +29,14 @@ void threadPool::dispatchTask(char ty, const strVec& taskArgs,
     }
 }
 
+
+/***************************************************************
+FUNCTION: threadPool::queryThreads() 
+
+Enqueue tasks to the thread pool and retrieve results.
+Runs in its own thread.
+The two loops should be merged into one.
+****************************************************************/
 void threadPool::queryThreads() 
 {
     while (workersAlive == true) {
@@ -38,8 +55,7 @@ void threadPool::queryThreads()
             if (avail == true) {
                 std::lock_guard<std::mutex> lck(stMtx);
                 std::string times = r.id + " " + std::to_string(r.startTime) + 
-                                    " " + std::to_string(r.endTime - 
-                                                         r.startTime);
+                                    " " + std::to_string(r.endTime - r.startTime);
                 globalLogger::logEntry(times);
                 resQ.push(r);
                 if (resQ.size() == totalIn)
@@ -49,6 +65,13 @@ void threadPool::queryThreads()
     }
 }
 
+
+/***************************************************************
+FUNCTION: threadPool::startDispatch()
+Start the all the threads in the pool along with the query thread.
+
+
+****************************************************************/
 bool threadPool::startDispatch()
 {
     for (uint32_t i = 0; i < maxThreads; i++)
@@ -58,6 +81,13 @@ bool threadPool::startDispatch()
     
     return true;
 }
+
+/***************************************************************
+FUNCTION: threadPool::waitForCompletion
+IN: failedIds List of failed task ids.
+
+Blocks until all the tasks finish.
+****************************************************************/
 
 void threadPool::waitForCompletion(strVec& failedIds)
 {
@@ -73,6 +103,11 @@ void threadPool::waitForCompletion(strVec& failedIds)
     }
 }
 
+/***************************************************************
+FUNCTION: threadPool::terminate()
+Terminate all threads and delete all data structures.
+
+****************************************************************/
 void threadPool::terminate()
 {
     workersAlive = false;

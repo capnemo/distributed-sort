@@ -1,3 +1,16 @@
+/***************************************************************************************
+FILENAME: nwDispatch.h
+
+DESCRIPTION:
+    Class to handle dispatch of tasks over the network. Runs a thread to handle network
+    reads and writes. Everything runs in the calling thread.
+
+NOTES:
+    Cannot be copy constructed and cannot be assigned.
+
+***************************************************************************************/
+
+
 #ifndef NWDISPATCH_H
 #define NWDISPATCH_H
 
@@ -21,6 +34,7 @@ class nwDispatch :public dispatch {
     void dispatchTask(char ty, const strVec& tArgs, std::string& taskId);
     void waitForCompletion(strVec& failedIds);
     void terminate();
+
     nwDispatch(const nwDispatch&) = delete;
     nwDispatch& operator = (const nwDispatch&) = delete;
     ~nwDispatch() = default;

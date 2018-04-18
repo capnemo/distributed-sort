@@ -3,6 +3,14 @@
 #include <ctime>
 #include "worker.h"
 
+
+/***************************************************************
+FUNCTION: worker::addTask
+IN: nextTask Task to be scheduled.
+
+Schedules a task to be run.
+****************************************************************/
+
 void worker::addTask(subTask& nextTask)
 {
     if (exTh == nullptr) 
@@ -13,6 +21,11 @@ void worker::addTask(subTask& nextTask)
     condVar.notify_one();
 }
 
+/***************************************************************
+FUNCTION: worker::ready()
+
+Returns if we are ready to accept a new task.
+****************************************************************/
 
 bool worker::ready()
 {
@@ -20,6 +33,12 @@ bool worker::ready()
     return (taskQ.size() < maxInQ) ? true:false;
 }
 
+
+/***************************************************************
+FUNCTION: worker::threadFunc()
+
+Executes the task. Runs in its own thread.
+****************************************************************/
 void worker::threadFunc()
 {
     uint32_t tSz = 0;
@@ -45,6 +64,12 @@ void worker::threadFunc()
 
 }
 
+/***************************************************************
+FUNCTION: worker::terminate()
+
+Terminates the execution thread and deletes all data structures.
+****************************************************************/
+
 void worker::terminate()
 {
     if (exTh == nullptr)
@@ -59,6 +84,12 @@ void worker::terminate()
     delete exTh;
 }
 
+/***************************************************************
+FUNCTION: worker::getResult
+OUT: res
+
+Returns the result of a task.
+****************************************************************/
 bool worker::getResult(struct subTask& res)
 {
     std::lock_guard<std::mutex> resLck(runMtx);

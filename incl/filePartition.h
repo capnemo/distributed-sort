@@ -1,3 +1,15 @@
+/***************************************************************************************
+FILENAME: filePartition.h
+
+DESCRIPTION:
+    Class to divide a delimited file of records in to a number of "iterations"
+    A file can be divided by the number of iterations or by the size of each iteration.
+
+NOTES:
+    Cannot be copy constructed and cannot be assigned.
+***************************************************************************************/
+
+
 #ifndef FILEPARTITION_H
 #define FILEPARTITION_H
 
@@ -22,6 +34,7 @@ class filePartition: public iterGen {
     bool setNumIter(int32_t num);
     bool getNextIter(strVec& iterArgs);
     //bool getNextIter(offPair& iter);
+
     filePartition(const filePartition&) = delete;
     filePartition& operator = (const filePartition&) = delete;
     ~filePartition() = default;

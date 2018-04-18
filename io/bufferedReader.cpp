@@ -4,6 +4,12 @@
 #include "globalLogger.h"
 #include "bufferedReader.h"
 
+
+/***************************************************************
+FUNCTION: bufferedReader::fillBuffers()
+Runs in its own thread. Reads and stuffs buffers.
+****************************************************************/
+
 void bufferedReader::fillBuffers()
 {
     while (inFStr) {
@@ -33,36 +39,15 @@ void bufferedReader::fillBuffers()
     ioAvail = false;
 }
 
-#if 0
-void bufferedReader::fillBuffers()
-{
-    char* eBuff = 0;
 
-    while (inFStr) {
-        if (eBuff == 0)
-            eBuff = getReserveBuffer();
+/***************************************************************
+FUNCTION: bufferedReader::readFromStream
+IN: buff
+IN: len
 
-        std::unique_lock<std::mutex> qLck(qMtx);
-        if (bufferQ.size() >= bufferSizeLimit) 
-            condVar.wait(qLck);
-        uint32_t bSz = bufferQ.size();
-        qLck.unlock();
+Reads to buff from the file.
 
-        uint32_t size = 0;
-        if (bSz < bufferSizeLimit) 
-            readFromStream(eBuff, size);
-
-        if (size != 0) {
-            qLck.lock();
-            bufferQ.push({eBuff, size});
-            qLck.unlock();
-            eBuff = 0;
-        }
-    }
-    ioAvail = false;
-}
-
-#endif
+****************************************************************/
 
 void bufferedReader::readFromStream(char *buff, uint32_t& len)
 {
@@ -74,6 +59,11 @@ void bufferedReader::readFromStream(char *buff, uint32_t& len)
     len = end;
 }
 
+/***************************************************************
+FUNCTION: bufferedReader::initBuffers()
+Initializes all the data structures.
+
+****************************************************************/
 bool bufferedReader::initBuffers()
 {   
     inFStr.open(fileName);
@@ -91,6 +81,11 @@ bool bufferedReader::initBuffers()
     return ioAvail;
 }
 
+/***************************************************************
+FUNCTION: bufferedReader::getBuffer()
+Preps the current buffer and turns it into a set of records.
+
+****************************************************************/
 void bufferedReader::getBuffer()
 {
     std::unique_lock<std::mutex> qLck(qMtx);
@@ -130,11 +125,23 @@ void bufferedReader::getBuffer()
     }
 }
 
+
+/***************************************************************
+FUNCTION: bufferedReader::checkCurrentLine() 
+Check if the current buffer is consumed. If so, refresh it.
+
+****************************************************************/
 void bufferedReader::checkCurrentLine() 
 {
     if (currentLine == lines.size()) 
         getBuffer();
 }
+
+
+/***************************************************************
+FUNCTION: bufferedReader::getCurrentLine() 
+Return the current line from the current buffer.
+****************************************************************/
 
 const char * const bufferedReader::getCurrentLine() 
 {
@@ -142,11 +149,23 @@ const char * const bufferedReader::getCurrentLine()
     return lines[currentLine];
 }
 
+/***************************************************************
+FUNCTION: bufferedReader::getLineAndIncr() 
+Get the current line and increment the counter.
+****************************************************************/
+
 const char * const bufferedReader::getLineAndIncr() 
 {
     checkCurrentLine();
     return lines[currentLine++];
 }
+
+/***************************************************************
+FUNCTION: bufferedReader::returnBuffer()
+IN:buff Buffer to be returned.
+
+Recycle a buffer
+****************************************************************/
 
 void bufferedReader::returnBuffer(char *buff)
 {
@@ -154,6 +173,10 @@ void bufferedReader::returnBuffer(char *buff)
     reserveList.push_back(buff);
 }
 
+/***************************************************************
+FUNCTION: bufferedReader::getReserveBuffer()
+Returns a buffer from the reserve list. 
+****************************************************************/
 char* bufferedReader::getReserveBuffer()
 {
     char *rBuff = nullptr;
@@ -171,12 +194,17 @@ char* bufferedReader::getReserveBuffer()
     return rBuff;
 }
 
+/***************************************************************
+FUNCTION: bufferedReader::isReadComplete() 
+Returns if the file has been read completely.
+****************************************************************/
 bool bufferedReader::isReadComplete() 
 {
-    /*
+#if 0
     std::cout << std::boolalpha << " " << ioAvail  << " " << bufferAlive
               << " " << currentLine << " " << lines.size() << std::endl;
-    */
+#endif
+
     if (ioAvail  || bufferAlive || (currentLine < lines.size()))  
         return false;
  
@@ -186,6 +214,10 @@ bool bufferedReader::isReadComplete()
     return true;
 }
 
+/***************************************************************
+FUNCTION: bufferedReader::cleanup()
+Cleanup prior to shutdown. Shutdown all threads cleanup all data structures.
+****************************************************************/
 void bufferedReader::cleanup()
 {
     readTh->join();

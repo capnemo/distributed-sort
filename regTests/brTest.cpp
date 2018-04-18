@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: brTest.cpp
+
+DESCRIPTION: 
+    Sanity test for bufferedReader. Driver will have to compare the input and output files.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #include <iostream>
 #include "bufferedReader.h"
 

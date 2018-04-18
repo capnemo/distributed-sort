@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: multiMergeHandler.h
+
+DESCRIPTION:
+    Class that handles merge requests from the initiator side on the agent side.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef MULTIMERGEHANDLER_H
 #define MULTIMERGEHANDLER_H
 

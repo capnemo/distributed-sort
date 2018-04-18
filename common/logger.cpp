@@ -9,6 +9,15 @@
 #include <set>
 #include "logger.h"
 
+
+/***************************************************************
+FUNCTION: logger::startLogger
+IN: fileName log file name
+
+Start the logger
+
+****************************************************************/
+
 bool logger::startLogger(const std::string& fileName)
 {
     outStr.open(fileName);
@@ -19,6 +28,15 @@ bool logger::startLogger(const std::string& fileName)
     open = true;
     return true;
 }
+
+
+/***************************************************************
+FUNCTION: logger::addEntry
+IN: line
+
+Print the entry to the log.
+
+****************************************************************/
 
 void logger::addEntry(const std::string& line) 
 {

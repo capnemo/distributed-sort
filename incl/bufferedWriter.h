@@ -1,3 +1,17 @@
+/***************************************************************************************
+FILENAME: bufferedWriter.h
+
+DESCRIPTION:
+    Class to write large file with delimited records
+    Records are written to the object one at a time and written to the file one block at a time.
+    Buffers are recycled. All writes happen in an independent thread
+
+NOTES:
+    Class is not copy constructible or assignable. It is also not to be inherited.
+
+***************************************************************************************/
+
+
 
 #ifndef BUFFEREDWRITER_H
 #define BUFFEREDWRITER_H

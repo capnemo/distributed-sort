@@ -3,6 +3,11 @@
 #include <string.h>
 #include <iostream>
 
+/***************************************************************
+FUNCTION: bufferedWriter::writeBuffers() 
+Write the current buffer to file. Runs in its own independent thread
+****************************************************************/
+
 void bufferedWriter::writeBuffers() 
 {
     while (incoming) {
@@ -24,12 +29,25 @@ void bufferedWriter::writeBuffers()
     }
 }
 
+/***************************************************************
+FUNCTION: bufferedWriter::returnBuffer
+IN: retBuff Buffer to be recycled.
+
+Recycles the buffer.
+****************************************************************/
+
 void bufferedWriter::returnBuffer(char *retBuff)
 {
     std::lock_guard<std::mutex> resLock(resMtx);
     reserveList.push_back(retBuff);
 
 }
+
+/***************************************************************
+FUNCTION: bufferedWriter::startBuffers()
+
+Starts the write thread and sets up the data structures.
+****************************************************************/
 
 bool bufferedWriter::startBuffers()
 {
@@ -50,6 +68,12 @@ bool bufferedWriter::startBuffers()
     return true;
 }
 
+
+/***************************************************************
+FUNCTION: bufferedWriter::getNewBuffer() 
+Gets a new buffers from the reserve list. If the list is empty, 
+it does a new.
+****************************************************************/
 char* bufferedWriter::getNewBuffer() 
 {
     char *newBuff = nullptr;
@@ -66,6 +90,13 @@ char* bufferedWriter::getNewBuffer()
     return newBuff;
 }
 
+/***************************************************************
+FUNCTION: bufferedWriter::cycleBuffers
+IN: newBuff Whether a new buffer is required.
+
+Switches the current buffer to a new one. Used when the current buffer
+is full.
+****************************************************************/
 void bufferedWriter::cycleBuffers(bool newBuff)
 {
     std::unique_lock<std::mutex> qLck(qMtx);
@@ -80,6 +111,15 @@ void bufferedWriter::cycleBuffers(bool newBuff)
     currentPos = 0;
 }
 
+/***************************************************************
+FUNCTION: bufferedWriter::addToBuffer
+IN: line Record to be added to the current buffer
+IN: lineSize Record size.
+
+Add a record to the current buffer
+****************************************************************/
+
+
 void bufferedWriter::addToBuffer(const char *line, uint32_t lineSize)
 {
     if (lineSize + currentPos  + 1 > bufferSize)
@@ -90,6 +130,12 @@ void bufferedWriter::addToBuffer(const char *line, uint32_t lineSize)
     currentBuffer[currentPos++] = '\n';
 }
 
+
+/***************************************************************
+FUNCTION: bufferedWriter::stopWrites()
+Stop the write thread and prep for shutdown.
+
+****************************************************************/
 void bufferedWriter::stopWrites()
 {
     cycleBuffers(false);
@@ -110,6 +156,13 @@ void bufferedWriter::stopWrites()
     }
 }
 
+/***************************************************************
+FUNCTION: bufferedWriter::cleanup()
+Cleanup all data structures.
+    
+
+
+****************************************************************/
 void bufferedWriter::cleanup()
 {
     delete writeTh;

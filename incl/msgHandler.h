@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: msgHandler.h
+
+DESCRIPTION:
+    Abstract base class for the agent side functions.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef MSGHANDLERBASE_H
 #define MSGHANDLERBASE_H
 

@@ -1,3 +1,14 @@
+/***************************************************************************************
+FILENAME: taskInitiator.h
+
+DESCRIPTION: 
+    A previous attempt at parallelizing a sort.
+
+NOTES:
+    DEPRICATED!! Not to be used.
+***************************************************************************************/
+
+
 #ifndef INITIATOR_H
 #define INITIATOR_H
 

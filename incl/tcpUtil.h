@@ -1,3 +1,15 @@
+/***************************************************************************************
+FILENAME: tcpUtil.h
+
+DESCRIPTION:
+    Namespace for utility functions that directly write to the wire and socket initialization 
+    functions.
+
+NOTES:
+
+***************************************************************************************/
+
+
 #ifndef TCPUTIL_H
 #define TCPUTIL_H
 

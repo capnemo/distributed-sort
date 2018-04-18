@@ -4,7 +4,14 @@
 #include "bufferedWriter.h"
 #include "bufferedReader.h"
 
-
+/*
+    
+    !!!!!!!!!!!!!!!!!!!!!! DEPRICATED !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!! DEPRICATED !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!! DEPRICATED !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!! DEPRICATED !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    DO NOT USE.
+*/
 int mergeMultipleFiles(const strVec& args) 
 {
     if (args.size() < 3) 
