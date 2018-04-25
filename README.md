@@ -35,7 +35,7 @@ Clang++ ver. >= 3.8.
 Testing and Running the software on a single machine.
 -----------------------------------------------------
 a) Extract the code from github and compile. 
-   cd <location of extract>;make
+   cd <location of extract>;make release
 b) Regression tests are in regTests. The script runTests.sh will run all 
    the tests.
    cd regTests;./runTests.sh

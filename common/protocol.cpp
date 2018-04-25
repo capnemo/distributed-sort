@@ -1,7 +1,11 @@
+#include <sstream>
+#include <iomanip>
+
 #include "protocol.h"
 #include "tcpUtil.h"
 
 static const char* termMsg = "F";
+static const char* taskMsg = "T";
 
 
 /***************************************************************
@@ -205,4 +209,18 @@ bool protocol::endOfConnection(const std::string& msg)
 {
     //return (msg[0] == 'F') ? true:false;
     return (msg[0] == termMsg[0]) ? true:false;
+}
+
+/***************************************************************
+FUNCTION: nwDispatch::getTaskId
+IN:  taskSerial. Task Serial no.
+OUT: id  task id.
+
+Construct a new task id.
+****************************************************************/
+void protocol::getTaskId(uint32_t taskSerial, std::string& id)
+{
+    std::stringstream ss;
+    ss << std::setw(4) << std::setfill('0') << taskSerial;
+    id = taskMsg + ss.str();
 }

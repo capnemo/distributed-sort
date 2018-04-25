@@ -28,6 +28,7 @@ namespace protocol {
     bool decodeResult(const std::string& rStr, struct result& res);
     void encodeResult(const struct result& res, std::string& rStr);
     void getTerminateMsg(std::string& msg);
+    void getTaskId(uint32_t taskSerial, std::string& id);
     bool endOfConnection(const std::string& msg);
 }
 #endif /*PROTOCOL_H*/

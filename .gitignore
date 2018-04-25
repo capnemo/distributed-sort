@@ -1,2 +1,5 @@
 *.o
 logs/
+agent
+lsort
+100m*

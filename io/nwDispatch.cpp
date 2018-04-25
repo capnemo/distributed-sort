@@ -293,25 +293,10 @@ void nwDispatch::getNewTask(char tType, const strVec& tArgs,
                             struct task& newTask)
 {
     std::string tid;
-    getTaskId(tid);
+    protocol::getTaskId(taskId, tid);
+    taskId++;
 
     newTask.type = tType;
     newTask.id = tid;
     newTask.args = tArgs;
 }
-
-/***************************************************************
-FUNCTION: nwDispatch::getTaskId
-OUT: id  task id.
-
-Construct a new task id.
-
-****************************************************************/
-void nwDispatch::getTaskId(std::string& id)
-{
-    std::stringstream ss;
-    ss << std::setw(4) << std::setfill('0') << taskId;
-    id = 'T' + ss.str();
-    taskId++;
-}
-
