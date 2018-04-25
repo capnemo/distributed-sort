@@ -2,11 +2,11 @@
 Description
 -----------
 
-Distributed Sort is a tool to sort large files ( > 1GB). The solution 
-is to break up the input file into multiple segments, sort each one of 
-the segments in parallel and merge all the sorted segments. Essentially 
-a distributed merge sort. The software works on most unix like OSes 
-and has been tested on linux, freeBSD and Mac OS X. The cluster consists 
+Distributed Sort is a tool to sort large files ( > 1GB) in a reasonable time.
+The solution is to break up the input file into multiple segments, sort each 
+one of the segments in parallel and merge all the sorted segments. 
+Essentially a distributed merge sort. The software works on most unix like 
+OSes and has been tested on linux, freeBSD and Mac OS X. The cluster consists 
 of one initiator and multiple agents.  The initiator starts sorts on 
 different agents and completes the merge once the sorts are done.
 It is possible to run the software with a single agent on the same machine 
@@ -55,7 +55,7 @@ b) Deploy to NFS.
 c) Compile the agent code on remote agents.
    cd deploy_dir/scripts
    Create a file with one agent's name for each OS in the cluster. One 
-   agent name per line.
+   agent name per line. Lets call this file compList.
    Run ./remoteCompile.sh compList This will create an agent binary 
    for every OS.
    Create a scratch directory on each machine's local file system. 
