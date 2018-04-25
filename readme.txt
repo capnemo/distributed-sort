@@ -45,11 +45,13 @@ c) Open two terminals. Run ./lsort <input file> <output file> in one terminal an
 Running the software in a cluster
 ----------------------------------
 a) Complete the configuration section and the section above.
+
 b) Deploy to NFS.
    Create a new directory. It should be a child of the NFS mount point. 
    Lets call it deploy_dir.
    cd deploy_dir/scripts;./deploy.sh deploy_dir
    deploy.sh will complain about a few missing header files. This is normal.
+
 c) Compile the agent code on remote agents.
    cd deploy_dir/scripts
    Create a file with one agent's name for each OS in the cluster. One 
@@ -60,6 +62,7 @@ c) Compile the agent code on remote agents.
    The name should be the same on all the machines. Add this name 
    to the config file, config.txt. It should be the value to the key 
    scratchLocation. 
+
 d) To sort the file. 
    cd deploy_dir/scripts
    Create a file with all the agent names. One agent name on each line. 
