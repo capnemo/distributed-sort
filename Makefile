@@ -1,9 +1,9 @@
 
 CC=clang++ -Wall -std=c++11 -Iincl 
 
-AGENT_OBJS := handlers/msgHandler.o handlers/sortHandler.o handlers/multiMergeHandler.o mergeSort/mergeSort.o threadUtil/worker.o threadUtil/threadPool.o io/bufferedReader.o io/bufferedWriter.o common/filePartition.o common/config.o common/logger.o agent.o common/tcpUtil.o common/protocol.o mergeSort/multiMerge.o common/dispatchIterations.o common/globalLogger.o common/globalConfig.o
+AGENT_OBJS := handlers/msgHandler.o handlers/sortHandler.o handlers/multiMergeHandler.o mergeSort/mergeSort.o threadUtil/worker.o threadUtil/threadPool.o io/bufferedReader.o io/bufferedWriter.o common/filePartition.o common/config.o common/logger.o mains/agent.o common/tcpUtil.o common/protocol.o mergeSort/multiMerge.o common/dispatchIterations.o common/globalLogger.o common/globalConfig.o
 
-SERVER_OBJS := common/tcpUtil.o common/protocol.o common/filePartition.o io/nwDispatch.o common/logger.o common/dispatchIterations.o common/config.o common/globalConfig.o common/globalLogger.o lsort.o
+SERVER_OBJS := common/tcpUtil.o common/protocol.o common/filePartition.o io/nwDispatch.o common/logger.o common/dispatchIterations.o common/config.o common/globalConfig.o common/globalLogger.o mains/lsort.o
 
 red_binary=agent_$(shell uname -s)
 
@@ -40,10 +40,11 @@ sanity:
 	$(CC)  --analyze -Xanalyzer -analyzer-output=text *.cpp */*.cpp
 
 lint:
-	clang-tidy *.cpp */*.cpp -- -std=c++11 -Iincl 
+	#clang-tidy *.cpp */*.cpp -- -std=c++11 -Iincl 
+	clang-tidy */*.cpp -- -std=c++11 -Iincl */*.cpp
 
 clean:
-	rm  -f initiators/*.o handlers/*.o agents/*.o io/*.o mergeSort/*.o threadUtil/*.o common/*.o agent.o lsort.o agent lsort
+	rm  -f initiators/*.o handlers/*.o agents/*.o io/*.o mergeSort/*.o threadUtil/*.o common/*.o mains/agent.o mains/lsort.o agent lsort
 # DO NOT DELETE
 
 agent.o: incl/localTypes.h incl/serverTypes.h incl/protocol.h

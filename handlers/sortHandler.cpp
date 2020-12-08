@@ -52,7 +52,7 @@ bool sortHandler::handler(const strVec& args)
         return false;
     }
     blockSizeLimit *= 1024 * 1024;
-    uint32_t numCores = std::thread::hardware_concurrency();
+    uint32_t numCores = std::thread::hardware_concurrency() - 1;
     
     uint32_t blockSize = std::min(blockSizeLimit, 
                                  (endRange - beginRange)/numCores);

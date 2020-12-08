@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     if (mergeArgs.size() <= 1) {
         globalLogger::logEntry("Not enough files to merge or too many sort errors");
         dT.terminate();
-        return true;
+        return -1;
     }
     
     mergeArgs.push_back(outputFile);

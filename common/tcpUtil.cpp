@@ -57,7 +57,7 @@ Convenience function to fill an address struct.
 void tcpUtil::prepareAddressStruct(struct sockaddr_in* servAddr, in_addr_t ip,
                          uint16_t port)
 {
-    bzero(servAddr, sizeof(struct sockaddr_in));
+    memset(servAddr, 0, sizeof(struct sockaddr_in));
     servAddr->sin_family = AF_INET;
     servAddr->sin_port = htons(port);
     servAddr->sin_addr.s_addr = ip;
@@ -79,7 +79,7 @@ int tcpUtil::getConnectedClientSocket(const char* servIp, uint16_t servPort)
         return sock;
 
     struct sockaddr_in servAddr;
-    bzero(&servAddr, sizeof(struct sockaddr_in));
+    memset(&servAddr, 0, sizeof(struct sockaddr_in));
     prepareAddressStruct(&servAddr, inet_addr(servIp), servPort);
 
     int rc = connect(sock, (const struct sockaddr *)&servAddr,
