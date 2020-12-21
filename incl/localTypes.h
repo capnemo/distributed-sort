@@ -20,6 +20,7 @@ NOTES:
 typedef std::vector<std::string> strVec;
 typedef std::pair<uint64_t, uint64_t> offPair;
 typedef std::vector<offPair> offPairVec;
+typedef std::vector<char *> charPtrVec;
 
 struct subTask {
     std::string id;

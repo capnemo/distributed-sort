@@ -1,11 +1,11 @@
 
 CC=clang++ -Wall -std=c++11 -Iincl 
 
-AGENT_OBJS := handlers/msgHandler.o handlers/sortHandler.o handlers/multiMergeHandler.o mergeSort/mergeSort.o threadUtil/worker.o threadUtil/threadPool.o io/bufferedReader.o io/bufferedWriter.o common/filePartition.o common/config.o common/logger.o mains/agent.o common/tcpUtil.o common/protocol.o mergeSort/multiMerge.o common/dispatchIterations.o common/globalLogger.o common/globalConfig.o
+AGENT_OBJS := handlers/msgHandler.o handlers/sortHandler.o handlers/blockSort.o handlers/multiMergeHandler.o handlers/blockSortHandler.o mergeSort/mergeSort.o threadUtil/worker.o threadUtil/threadPool.o io/bufferedReader.o io/bufferedWriter.o common/filePartition.o common/config.o common/logger.o mains/agent.o common/tcpUtil.o common/protocol.o mergeSort/multiMerge.o common/dispatchIterations.o common/globalLogger.o common/globalConfig.o
 
 SERVER_OBJS := common/tcpUtil.o common/protocol.o common/filePartition.o io/nwDispatch.o common/logger.o common/dispatchIterations.o common/config.o common/globalConfig.o common/globalLogger.o mains/lsort.o
 
-red_binary=agent_$(shell uname -s)
+red_binary=agent_$(shell uname -s)_$(shell hostname)
 
 #thsan: CC += -fsanitize=thread
 #thsan: CCLD += -fsanitize=thread
@@ -19,6 +19,9 @@ debug: all
 release: CC += -Ofast
 release: all
 
+remote: CC += -Ofast
+remote: rem_x
+
 depend:
 	makedepend -- -Iincl -- -Y *.cpp */*.cpp 2>/dev/null  #Spurious warnings about missing system headers.
 
@@ -29,8 +32,8 @@ lsort:$(SERVER_OBJS)
 agent:$(AGENT_OBJS)
 	$(CC) $(AGENT_OBJS) -o agent -lpthread
 
-remote:$(AGENT_OBJS)
-	$(CC) $(AGENT_OBJS) -o $(red_binary) -lpthread
+rem_x:$(AGENT_OBJS)
+	$(CC) $(AGENT_OBJS) -Ofast -o $(red_binary) -lpthread
 
 %.o:%.cpp
 	$(CC) -c $*.cpp  -o $*.o

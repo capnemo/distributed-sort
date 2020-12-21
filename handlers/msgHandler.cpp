@@ -1,5 +1,6 @@
 #include "msgHandler.h"
 #include "sortHandler.h"
+#include "blockSortHandler.h"
 #include "multiMergeHandler.h"
 
 /***************************************************************
@@ -13,6 +14,8 @@ msgHandlerBase* msgHandlerBase::getHandler(char handlerId)
 {
 
     switch (handlerId) {
+        case 'g':
+            return new blockSortHandler();
         case 's':
             return new sortHandler();
         case 'm':

@@ -9,7 +9,7 @@ fi
 list=$(cat $1)
 binDir=$(pwd)
 for i in $list
-    do
-        #ssh $i "cd $binDir/code; make clean;make remote"
-        ssh $i "cd $binDir; ./localMake.sh"
-    done
+do
+    #ssh $i "cd $binDir/code; make clean;make remote"
+    ssh $i "cd $binDir; ./localMake.sh"
+done

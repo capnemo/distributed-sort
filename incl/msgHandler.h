@@ -17,11 +17,9 @@ NOTES:
 
 class msgHandlerBase {
     public:
-    msgHandlerBase(){}
-    static msgHandlerBase* getHandler(char handlerId);
-    
+    msgHandlerBase() {}
     virtual bool handler(const strVec& args) = 0;
+    static msgHandlerBase* getHandler(char handlerId);
     virtual ~msgHandlerBase() = default;
-
 };
 #endif /*MSGHANDLERBASE_H*/

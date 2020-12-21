@@ -66,6 +66,6 @@ chmod 777 $parentDir/code/*/*
 cp ../Makefile $parentDir/code
 cp ../lsort $parentDir/run #Change from server to something else.
 cp ../config.txt $parentDir/run
-cp remoteCompile.sh localMake.sh $parentDir/scripts
-cp remoteStart.sh runLocal.sh $parentDir/scripts
+cp config-check.sh remoteCompile.sh localMake.sh $parentDir/scripts
+cp node-list remoteStart.sh runLocal.sh $parentDir/scripts
 echo $logPref >> $parentDir/run/config.txt

@@ -7,4 +7,4 @@ if [ $(uname -s) == "FreeBSD" ]
     else
     make clean; make remote
 fi
-cp agent_$(uname -s) ../run
+cp agent_$(uname -s)_$(hostname) ../run

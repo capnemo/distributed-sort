@@ -2,5 +2,5 @@
 
 cd $1/run
 echo $(uname -s)
-./agent_$(uname -s) $2
+./agent_$(uname -s)_$(hostname) $2
 

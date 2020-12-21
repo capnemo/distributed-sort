@@ -4,7 +4,7 @@ FILENAME: serverTypes.h
 DESCRIPTION:
     Datatypes for the initiator side. 
 
-NOTES:
+NOTES: Merge with localTypes
 
 ***************************************************************************************/
 
