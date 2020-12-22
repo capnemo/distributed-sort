@@ -13,7 +13,7 @@ red_binary=agent_$(shell uname -s)_$(shell hostname)
 #thsan: CCLD += -fsanitize=thread
 #thsan: all
 
-all: lsort agent ssort
+all: lsort agent ssort dist
 
 debug: CC += -ggdb
 debug: all
@@ -36,6 +36,10 @@ agent:$(AGENT_OBJS)
 
 ssort:$(SSORT_OBJS)
 	$(CC) $(SSORT_OBJS) -o ssort -lpthread
+
+dist:lsort agent ssort
+	mkdir -p bin
+	mv lsort agent ssort bin
 
 rem_x:$(AGENT_OBJS)
 	$(CC) $(AGENT_OBJS) -Ofast -o $(red_binary) -lpthread
