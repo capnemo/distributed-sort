@@ -2,4 +2,6 @@
 logs/
 agent
 lsort
+ssort
 100m*
+*.log

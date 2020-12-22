@@ -15,6 +15,32 @@ typedef std::pair<std::string, std::string> strPair;
 typedef std::queue<std::string> strQ;
 
 /***************************************************************
+FUNCTION: blockSortHandler::runSort
+IN inFile        input file to be sorted.
+IN outFile       output file.
+
+Calls handler with the appropriate args.
+***************************************************************/
+
+bool blockSortHandler::runSort(const std::string& inputFile, 
+                               const std::string& outputFile)
+{
+    strVec sortArgs;
+    sortArgs.push_back(inputFile);
+    sortArgs.push_back(std::to_string(0));
+
+    struct stat sBuf;
+    if (stat(inputFile.c_str(), &sBuf) == -1) {
+        globalLogger::logEntry("Error opening input file");
+        return false;
+    }
+    sortArgs.push_back(std::to_string(sBuf.st_size));
+    sortArgs.push_back(outputFile);
+
+    return handler(sortArgs);
+}
+
+/***************************************************************
 FUNCTION: blockSortHandler::handler
 IN: args Input arguments. 
 arg[0] Input file.
@@ -100,5 +126,6 @@ bool blockSortHandler::handler(const strVec& args)
 
     mergeWriter.stopWrites();
     mergeWriter.cleanup();
+    globalLogger::logEntry("merge complete");
     return true;
 }

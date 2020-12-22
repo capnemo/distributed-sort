@@ -13,7 +13,6 @@ Entry point for the initiator side for long sort. Starts and completes network d
 
 #include "tcpUtil.h"
 #include "serverTypes.h"
-//#include "taskInitiator.h"
 #include "filePartition.h"
 #include "nwDispatch.h"
 #include "dispatchIterations.h"

@@ -18,6 +18,8 @@ NOTES:
 class blockSortHandler:public msgHandlerBase {
     public:
     blockSortHandler() {}
+    bool runSort(const std::string& inputFile, const std::string& outputFile);
+
     virtual bool handler(const strVec& args);
     blockSortHandler(const blockSortHandler&) = delete;
     blockSortHandler& operator = (const blockSortHandler&) = delete;

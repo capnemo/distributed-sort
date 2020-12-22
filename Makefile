@@ -5,13 +5,15 @@ AGENT_OBJS := handlers/msgHandler.o handlers/sortHandler.o handlers/blockSort.o 
 
 SERVER_OBJS := common/tcpUtil.o common/protocol.o common/filePartition.o io/nwDispatch.o common/logger.o common/dispatchIterations.o common/config.o common/globalConfig.o common/globalLogger.o mains/lsort.o
 
+SSORT_OBJS := common/filePartition.o common/logger.o common/dispatchIterations.o common/globalLogger.o handlers/blockSortHandler.o handlers/blockSort.o io/bufferedWriter.o mains/ssort.o
+
 red_binary=agent_$(shell uname -s)_$(shell hostname)
 
 #thsan: CC += -fsanitize=thread
 #thsan: CCLD += -fsanitize=thread
 #thsan: all
 
-all: lsort agent
+all: lsort agent ssort
 
 debug: CC += -ggdb
 debug: all
@@ -31,6 +33,9 @@ lsort:$(SERVER_OBJS)
 
 agent:$(AGENT_OBJS)
 	$(CC) $(AGENT_OBJS) -o agent -lpthread
+
+ssort:$(SSORT_OBJS)
+	$(CC) $(SSORT_OBJS) -o ssort -lpthread
 
 rem_x:$(AGENT_OBJS)
 	$(CC) $(AGENT_OBJS) -Ofast -o $(red_binary) -lpthread
