@@ -24,10 +24,6 @@ release: all
 remote: CC += -Ofast
 remote: rem_x
 
-depend:
-	makedepend -- -Iincl -- -Y *.cpp */*.cpp 2>/dev/null  #Spurious warnings about missing system headers.
-
-
 lsort:$(SERVER_OBJS)
 	$(CC) $(SERVER_OBJS) -o lsort -lpthread
 
@@ -59,61 +55,33 @@ clean:
 	rm  -f initiators/*.o handlers/*.o agents/*.o io/*.o mergeSort/*.o threadUtil/*.o common/*.o mains/agent.o mains/lsort.o agent lsort
 # DO NOT DELETE
 
-agent.o: incl/localTypes.h incl/serverTypes.h incl/protocol.h
-agent.o: incl/globalConfig.h incl/config.h incl/msgHandler.h incl/logger.h
-agent.o: incl/tcpUtil.h incl/globalLogger.h
-lsort.o: incl/tcpUtil.h incl/serverTypes.h incl/localTypes.h
-lsort.o: incl/filePartition.h incl/iterGen.h incl/nwDispatch.h
-lsort.o: incl/dispatch.h incl/dispatchIterations.h incl/globalLogger.h
-lsort.o: incl/globalConfig.h incl/config.h
-common/config.o: incl/config.h
-common/dispatchIterations.o: incl/dispatchIterations.h incl/dispatch.h
-common/dispatchIterations.o: incl/localTypes.h incl/serverTypes.h
-common/dispatchIterations.o: incl/iterGen.h
-common/filePartition.o: incl/filePartition.h incl/iterGen.h incl/localTypes.h
-common/fileUtil.o: incl/localTypes.h incl/fileUtil.h
-common/globalConfig.o: incl/config.h incl/globalConfig.h
-common/globalLogger.o: incl/logger.h incl/globalLogger.h
-common/logger.o: incl/logger.h
-common/protocol.o: incl/protocol.h incl/localTypes.h incl/serverTypes.h
-common/protocol.o: incl/tcpUtil.h
-common/tcpUtil.o: incl/tcpUtil.h
-handlers/msgHandler.o: incl/msgHandler.h incl/logger.h incl/localTypes.h
-handlers/msgHandler.o: incl/sortHandler.h incl/threadPool.h incl/dispatch.h
-handlers/msgHandler.o: incl/serverTypes.h incl/worker.h
-handlers/msgHandler.o: incl/multiMergeHandler.h
-handlers/multiMergeHandler.o: incl/localTypes.h incl/bufferedWriter.h
-handlers/multiMergeHandler.o: incl/bufferedReader.h incl/multiMergeHandler.h
-handlers/multiMergeHandler.o: incl/msgHandler.h incl/logger.h
-handlers/multiMergeHandler.o: incl/globalLogger.h
-handlers/sortHandler.o: incl/threadPool.h incl/dispatch.h incl/localTypes.h
-handlers/sortHandler.o: incl/serverTypes.h incl/worker.h incl/config.h
-handlers/sortHandler.o: incl/mergeSort.h incl/sortMerge.h
-handlers/sortHandler.o: incl/filePartition.h incl/iterGen.h
-handlers/sortHandler.o: incl/sortHandler.h incl/msgHandler.h incl/logger.h
-handlers/sortHandler.o: incl/dispatchIterations.h incl/globalLogger.h
-handlers/sortHandler.o: incl/globalConfig.h
-io/bufferedReader.o: incl/globalLogger.h incl/bufferedReader.h
-io/bufferedWriter.o: incl/bufferedWriter.h incl/globalLogger.h
-io/nwDispatch.o: incl/nwDispatch.h incl/dispatch.h incl/localTypes.h
-io/nwDispatch.o: incl/serverTypes.h incl/tcpUtil.h incl/protocol.h
-io/nwDispatch.o: incl/globalLogger.h
-mergeSort/merge.o: incl/bufferedReader.h incl/bufferedWriter.h
-mergeSort/mergeSort.o: incl/mergeSort.h incl/localTypes.h
-mergeSort/mergeSort.o: incl/bufferedReader.h incl/bufferedWriter.h
-mergeSort/multiMerge.o: incl/localTypes.h incl/bufferedWriter.h
-mergeSort/multiMerge.o: incl/bufferedReader.h incl/multiMergeHandler.h
-mergeSort/multiMerge.o: incl/msgHandler.h incl/logger.h incl/globalLogger.h
-mergeSort/multipleMerge.o: incl/localTypes.h incl/bufferedWriter.h
-mergeSort/multipleMerge.o: incl/bufferedReader.h
-regTests/brTest.o: incl/bufferedReader.h
-regTests/bwTest.o: incl/bufferedWriter.h
-regTests/mergeTest.o: incl/multiMergeHandler.h incl/localTypes.h
-regTests/mergeTest.o: incl/msgHandler.h incl/logger.h
-regTests/protTest.o: incl/protocol.h incl/localTypes.h incl/serverTypes.h
-regTests/threadTest.o: incl/threadPool.h incl/dispatch.h incl/localTypes.h
-regTests/threadTest.o: incl/serverTypes.h incl/worker.h
-threadUtil/threadPool.o: incl/threadPool.h incl/dispatch.h incl/localTypes.h
-threadUtil/threadPool.o: incl/serverTypes.h incl/worker.h incl/mergeSort.h
-threadUtil/threadPool.o: incl/globalLogger.h
-threadUtil/worker.o: incl/worker.h incl/localTypes.h
+
+./mergeSort/mergeSort.o: mergeSort/mergeSort.cpp incl/mergeSort.h incl/localTypes.h incl/bufferedReader.h incl/bufferedWriter.h
+./mergeSort/multiMerge.o: mergeSort/multiMerge.cpp incl/localTypes.h incl/bufferedWriter.h incl/bufferedReader.h incl/multiMergeHandler.h incl/msgHandler.h incl/logger.h incl/globalLogger.h
+./mains/agent.o: mains/agent.cpp incl/localTypes.h incl/serverTypes.h incl/protocol.h incl/globalConfig.h incl/config.h incl/msgHandler.h incl/logger.h incl/tcpUtil.h incl/globalLogger.h
+./mains/lsort.o: mains/lsort.cpp incl/tcpUtil.h incl/serverTypes.h incl/localTypes.h incl/filePartition.h incl/iterGen.h incl/nwDispatch.h incl/dispatch.h incl/dispatchIterations.h incl/globalLogger.h incl/globalConfig.h incl/config.h
+./mains/ssort.o: mains/ssort.cpp incl/globalLogger.h incl/blockSortHandler.h incl/localTypes.h incl/msgHandler.h incl/logger.h
+./threadUtil/worker.o: threadUtil/worker.cpp incl/worker.h incl/localTypes.h
+./threadUtil/threadPool.o: threadUtil/threadPool.cpp incl/threadPool.h incl/dispatch.h incl/localTypes.h incl/serverTypes.h incl/worker.h incl/mergeSort.h incl/globalLogger.h
+./regTests/brTest.o: regTests/brTest.cpp incl/bufferedReader.h
+./regTests/bwTest.o: regTests/bwTest.cpp incl/bufferedWriter.h
+./regTests/threadTest.o: regTests/threadTest.cpp regTests/../incl/threadPool.h incl/dispatch.h incl/localTypes.h incl/serverTypes.h incl/worker.h
+./regTests/mergeTest.o: regTests/mergeTest.cpp incl/multiMergeHandler.h incl/localTypes.h incl/msgHandler.h incl/logger.h
+./regTests/protTest.o: regTests/protTest.cpp incl/protocol.h incl/localTypes.h incl/serverTypes.h
+./io/bufferedReader.o: io/bufferedReader.cpp incl/globalLogger.h incl/bufferedReader.h
+./io/nwDispatch.o: io/nwDispatch.cpp incl/nwDispatch.h incl/dispatch.h incl/localTypes.h incl/serverTypes.h incl/tcpUtil.h incl/protocol.h incl/globalLogger.h
+./io/bufferedWriter.o: io/bufferedWriter.cpp incl/bufferedWriter.h incl/globalLogger.h
+./handlers/blockSort.o: handlers/blockSort.cpp incl/blockSort.h incl/localTypes.h incl/blockInterface.h incl/globalLogger.h
+./handlers/multiMergeHandler.o: handlers/multiMergeHandler.cpp incl/localTypes.h incl/bufferedWriter.h incl/bufferedReader.h incl/multiMergeHandler.h incl/msgHandler.h incl/logger.h incl/globalLogger.h
+./handlers/msgHandler.o: handlers/msgHandler.cpp incl/msgHandler.h incl/logger.h incl/localTypes.h incl/sortHandler.h incl/threadPool.h incl/dispatch.h incl/serverTypes.h incl/worker.h incl/blockSortHandler.h incl/multiMergeHandler.h
+./handlers/blockSortHandler.o: handlers/blockSortHandler.cpp incl/filePartition.h incl/iterGen.h incl/localTypes.h incl/blockSortHandler.h incl/msgHandler.h incl/logger.h incl/globalLogger.h incl/blockSort.h incl/blockInterface.h incl/bufferedWriter.h
+./handlers/sortHandler.o: handlers/sortHandler.cpp incl/threadPool.h incl/dispatch.h incl/localTypes.h incl/serverTypes.h incl/worker.h incl/config.h incl/mergeSort.h incl/sortMerge.h incl/filePartition.h incl/iterGen.h incl/sortHandler.h incl/msgHandler.h incl/logger.h incl/dispatchIterations.h incl/globalLogger.h incl/globalConfig.h
+./common/fileUtil.o: common/fileUtil.cpp incl/localTypes.h incl/fileUtil.h
+./common/dispatchIterations.o: common/dispatchIterations.cpp incl/dispatchIterations.h incl/dispatch.h incl/localTypes.h incl/serverTypes.h incl/iterGen.h
+./common/config.o: common/config.cpp incl/config.h
+./common/globalConfig.o: common/globalConfig.cpp incl/config.h incl/globalConfig.h
+./common/filePartition.o: common/filePartition.cpp incl/filePartition.h incl/iterGen.h incl/localTypes.h
+./common/globalLogger.o: common/globalLogger.cpp incl/logger.h incl/globalLogger.h
+./common/tcpUtil.o: common/tcpUtil.cpp incl/tcpUtil.h
+./common/protocol.o: common/protocol.cpp incl/protocol.h incl/localTypes.h incl/serverTypes.h incl/tcpUtil.h
+./common/logger.o: common/logger.cpp incl/logger.h
