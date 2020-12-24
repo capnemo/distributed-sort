@@ -68,7 +68,7 @@ d) To sort the file.
    Both output file and input file should be on NFS and be accessible to 
    all the agents and the initiator. Logs can be found in deploy_dir/logs.
 
-Performance Comparision (1 agent and initiator on the same machine).
+Performance Comparision (ssort on a single machine).
 ------------------------------------------------------------------
 Distributed sort was run on 3 different machines locally on a 
 file containing 100 million records. For comparision, the same 
@@ -87,7 +87,7 @@ Machine | Distributed Sort | Native sort |
 ------------------------------------------
 |b      |      38          |   111       |
 ------------------------------------------
-|c      |      37          |   863??     |
+|c      |      37          |   1516      |
 ------------------------------------------
 
 Distributed sort is multithreaded which explains to a certain 
