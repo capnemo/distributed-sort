@@ -9,8 +9,14 @@ Essentially a distributed merge sort. The software works on most unix like
 OSes and has been tested on linux, freeBSD and Mac OS X. The cluster consists 
 of one initiator and multiple agents.  The initiator starts sorts on 
 different agents and completes the merge once the sorts are done.
-It is possible to run the software with a single agent on the same machine 
-as the initiator.
+There is a binary (ssort) that runs on a single machine and avoids all 
+intermediate files.
+
+Running the software on a single machine.
+-----------------------------------------
+a) Extract the code from github and compile. 
+   cd <location of extract>;make release
+b) cd bin; ssort <input file> <output file>
 
 Prerequisites and configuration
 -------------------------------
@@ -32,16 +38,6 @@ Compiler
 --------
 Clang++ ver. >= 3.8.
 
-Testing and Running the software on a single machine.
------------------------------------------------------
-a) Extract the code from github and compile. 
-   cd <location of extract>;make release
-b) Regression tests are in regTests. The script runTests.sh will run all 
-   the tests.
-   cd regTests;./runTests.sh
-c) Open two terminals. Run ./lsort <input file> <output file> in one terminal and
-   ./agent 127.0.0.1 in the other.
-
 Running the software in a cluster
 ----------------------------------
 a) Complete the configuration section and the section above.
@@ -54,14 +50,15 @@ b) Deploy to NFS.
 
 c) Compile the agent code on remote agents.
    cd deploy_dir/scripts
-   Create a file with one agent's name for each OS in the cluster. One 
+   Create a file with agent's machine names in the cluster. One 
    agent name per line. Lets call this file compList.
    Run ./remoteCompile.sh compList This will create an agent binary 
-   for every OS.
+   for every machine.
    Create a scratch directory on each machine's local file system. 
    The name should be the same on all the machines. Add this name 
    to the config file, config.txt. It should be the value to the key 
-   scratchLocation. 
+   scratchLocation. For an example of the config.txt file, see the etc 
+   directory
 
 d) To sort the file. 
    cd deploy_dir/scripts
@@ -78,19 +75,19 @@ file containing 100 million records. For comparision, the same
 file was sorted using the platform's command line sort. 
 
 The 3 machines are
-a) Ubuntu 16.04 2x Xeon E5405 2.0 GHz 8GB 8 Cores total
-b) Ubuntu 16.04 AMD FX 8320 1.4 - 3.5 GHz 16GB
+a) Mint 20 2x Xeon E5405 2.0 GHz 8GB 8 Cores total
+b) Ubuntu 18.04 AMD FX 8320 2.0 GHz 16GB
 c) Mac OS x High Sierra Core i7 2.5 GHz 16 GB
 
 The following are the elapsed times in seconds
 ------------------------------------------
 Machine | Distributed Sort | Native sort |
 ------------------------------------------
-|a      |      80          |   235       |
+|a      |      65          |   246       |
 ------------------------------------------
-|b      |      49          |   122       |
+|b      |      38          |   111       |
 ------------------------------------------
-|c      |      53          |   863       |
+|c      |      37          |   863??     |
 ------------------------------------------
 
 Distributed sort is multithreaded which explains to a certain 
@@ -104,11 +101,13 @@ Initiator on a linux machine and 1 agent each on a, b and c.
 -------------------------------------------
 |No. of records in billion | Time to sort |
 -------------------------------------------
-| 1                        | 402          |
+| 1                        | 474          |
 -------------------------------------------
-| 2                        | 863          |
+| 2                        | 881          |
 -------------------------------------------
-| 3                        | 1225         |
+| 3                        | 2096         |
+-------------------------------------------
+| 5                        | 4378         |
 -------------------------------------------
 
 Future direction.

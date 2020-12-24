@@ -1,0 +1,25 @@
+chandra@store:bin $ cat ssort.log 
+Wed Dec 23 22:34:06 2020:Sort block size is 157142857
+Wed Dec 23 22:34:06 2020:Starting sort
+Wed Dec 23 22:34:06 2020:Starting Sort Block 0
+Wed Dec 23 22:34:06 2020:Starting Sort Block 1
+Wed Dec 23 22:34:06 2020:Starting Sort Block 3
+Wed Dec 23 22:34:06 2020:Starting Sort Block 2
+Wed Dec 23 22:34:06 2020:Starting Sort Block 4
+Wed Dec 23 22:34:06 2020:Starting Sort Block 5
+Wed Dec 23 22:34:06 2020:Starting Sort Block 6
+Wed Dec 23 22:34:24 2020:Sort Block 4 completed in:18
+Wed Dec 23 22:34:24 2020:Sort Block 5 completed in:18
+Wed Dec 23 22:34:24 2020:Sort Block 2 completed in:18
+Wed Dec 23 22:34:24 2020:Sort Block 6 completed in:18
+Wed Dec 23 22:34:24 2020:Sort Block 1 completed in:18
+Wed Dec 23 22:34:24 2020:Sort Block 0 completed in:18
+Wed Dec 23 22:34:24 2020:Sort Block 3 completed in:18
+Wed Dec 23 22:34:25 2020:Starting merge
+Wed Dec 23 22:34:44 2020:merge complete
+chandra@store:bin $ time sort 100m > 100m.out
+
+real	1m51.596s
+user	7m50.454s
+sys	0m9.179s
+chandra@store:bin $ 

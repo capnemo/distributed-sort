@@ -1,0 +1,11 @@
+Tue Dec 22 20:00:42 2020:Task Dispatch 6  T0000 s
+Tue Dec 22 20:00:42 2020:Task Dispatch 7  T0001 s
+Tue Dec 22 20:00:42 2020:Task Dispatch 8  T0002 s
+Tue Dec 22 20:07:55 2020:Result: 8 T0002 RC 0
+Tue Dec 22 20:08:32 2020:Result: 7 T0001 RC 0
+Tue Dec 22 20:11:33 2020:Result: 6 T0000 RC 0
+Tue Dec 22 20:11:33 2020:Task Dispatch 8  T0003 m
+Tue Dec 22 20:15:14 2020:Result: 8 T0003 RC 0
+Tue Dec 22 20:15:23 2020:client 6 Finished
+Tue Dec 22 20:15:23 2020:client 7 Finished
+Tue Dec 22 20:15:23 2020:client 8 Finished

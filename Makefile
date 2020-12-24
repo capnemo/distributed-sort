@@ -35,7 +35,7 @@ ssort:$(SSORT_OBJS)
 
 dist:lsort agent ssort
 	mkdir -p bin
-	mv lsort agent ssort bin
+	cp lsort agent ssort bin
 
 rem_x:$(AGENT_OBJS)
 	$(CC) $(AGENT_OBJS) -Ofast -o $(red_binary) -lpthread
@@ -52,7 +52,7 @@ lint:
 	clang-tidy */*.cpp -- -std=c++11 -Iincl */*.cpp
 
 clean:
-	rm  -f initiators/*.o handlers/*.o agents/*.o io/*.o mergeSort/*.o threadUtil/*.o common/*.o mains/agent.o mains/lsort.o agent lsort
+	rm  -rf initiators/*.o handlers/*.o agents/*.o io/*.o mergeSort/*.o threadUtil/*.o common/*.o mains/*.o mains/lsort mains/agent mains/ssort bin
 # DO NOT DELETE
 
 
