@@ -94,6 +94,7 @@ Distributed sort is multithreaded which explains to a certain
 extent the differences in performance between it and the 
 native sort on Linux. On Mac OS, the most likely exlpanation is that
 native sort is IO constrained.
+ssort is faster than the command line sort on Linux, MacOS and FreeBSD.
 
 Performance for different input sizes 
 -------------------------------------
