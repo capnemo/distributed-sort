@@ -18,6 +18,7 @@ Not copy constructible or assignable. Not to be instantiated directly.
 #include <vector>
 #include <string>
 #include <map>
+#include <cstdint>
 
 class mrConfig {
     
