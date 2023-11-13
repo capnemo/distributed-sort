@@ -113,8 +113,7 @@ Initiator on a linux machine and 1 agent each on a, b and c.
 
 Future direction.
 -----------------
-a) A higher abstraction with a type algebra to handle a bigger subset 
-   of parallel algorithms.
 b) A facility to run or bind code in different languages. 
 c) Merge seems to be inefficient at larger file sizes. 
    To be investigated.
+
