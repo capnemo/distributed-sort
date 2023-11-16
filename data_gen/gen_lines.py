@@ -12,7 +12,7 @@ def gen_lines(serial, line_len, num_lines, file_ob, lck):
     for nl in range(0, num_lines):
         ln=""
         for rc in range(0, line_len):
-            ln += chr(random.randrange(ord('a'), ord('z')))
+            ln += chr(random.randrange(ord('a'), ord('z') + 1))
         bf.append(ln)
         if (len(bf) == 1000):
             write_to_file(file_ob, bf, lck)

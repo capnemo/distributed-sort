@@ -12,12 +12,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    std::string inFile(argv[1]);
+    std::string outFile(argv[2]);
     char *logDir = dirname(argv[2]);
     std::string logFileName = std::string(logDir) + "/ssort.log";
     globalLogger::initLogger(logFileName);
 
-    std::string inFile(argv[1]);
-    std::string outFile(argv[2]);
     blockSortHandler blockSorter;
     if (blockSorter.runSort(inFile, outFile) == false) {
         std::cout << "Sort Failed" << std::endl;
