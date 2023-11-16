@@ -7,7 +7,7 @@ import time
 from os import cpu_count
 from multiprocessing import Process, Lock
 
-def gen_lines(line_len, num_lines, file_ob, lck):
+def gen_lines(serial, line_len, num_lines, file_ob, lck):
     bf=[]
     for nl in range(0, num_lines):
         ln=""
@@ -19,7 +19,7 @@ def gen_lines(line_len, num_lines, file_ob, lck):
             bf = []
 
     write_to_file(file_ob, bf, lck)
-    print("thread ends")
+    print("thread ends ", serial)
 
 def write_to_file(file_object, lines, lck):
     lck.acquire();
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     outfile = open(file_name, 'w')
     lk = threading.Lock();
     for t in range(0, num_threads):
-        Process(target=gen_lines, args=(line_len, recs_per_thread, 
+        Process(target=gen_lines, args=(t, line_len, recs_per_thread, 
                 outfile, lk)).start()
         print("starting thread " + str(t))
 
