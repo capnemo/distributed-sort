@@ -28,9 +28,12 @@ def write_to_file(file_object, lines, lck):
     file_object.flush()
     lck.release();
 
+    
 if __name__ == "__main__":
     if (len(sys.argv) != 4):
-        print("error")
+        print('Generates random strings')
+        arg_str = '<line length> <number of lines> <output file>';
+        print('usage:', sys.argv[0], arg_str)
         sys.exit()
 
     line_len = int(sys.argv[1])
